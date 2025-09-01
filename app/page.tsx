@@ -11,8 +11,8 @@ export default function GradientLogic() {
       {/* NAVBAR */}
       <header className="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/70 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
-          <a href="#home" className="flex items-center gap-2">
-            {/* Logo will be added here once provided as file */}
+          <a href="#home" className="flex items-center gap-3">
+            <img src="/gl-logo.png" alt="GradientLogic" className="h-8 w-8" />
             <span className="font-semibold text-xl tracking-tight">Gradient <span className="text-indigo-600">Logic</span></span>
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm">
