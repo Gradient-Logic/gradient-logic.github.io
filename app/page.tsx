@@ -1,6 +1,6 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { ArrowRight, MessageSquare, Brain, Shield, Calendar, Mail, Search, Lightbulb, Wrench, Rocket, Network, Bot, Workflow, Cpu, Database, Zap, Activity, CheckCircle2, TrendingUp, FileCode2, Timer, Award, BarChart } from "lucide-react";
+import { ArrowRight, MessageSquare, Brain, Shield, Mail, Search, Lightbulb, Wrench, Rocket, Network, Bot, Workflow, Cpu, Database, Zap, Activity, CheckCircle2, TrendingUp, FileCode2, Timer, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -143,7 +143,7 @@ const CodeTerminal = () => {
   if (!mounted) return null;
 
   return (
-    <div className="bg-slate-900 rounded-2xl p-6 font-mono text-sm shadow-2xl border border-slate-800">
+    <div className="bg-slate-900 rounded-2xl p-6 font-mono text-sm shadow-2xl border border-slate-800 h-[400px] overflow-hidden">
       <div className="flex items-center gap-2 mb-4">
         <div className="flex gap-2">
           <div className="w-3 h-3 rounded-full bg-red-500" />
@@ -152,7 +152,7 @@ const CodeTerminal = () => {
         </div>
         <span className="text-slate-500 text-xs">terminal</span>
       </div>
-      <div className="space-y-1 min-h-[300px]">
+      <div className="space-y-1 h-[320px] overflow-y-auto">
         {lines && lines.length > 0 && lines.map((line, i) => {
           if (!line || typeof line !== 'string') return null;
           return (
@@ -204,15 +204,15 @@ const AgentFlowVisualization = () => {
   }, []);
 
   const agents = [
-    { id: 'research', x: '15%', y: '20%', icon: Bot, color: 'indigo', label: 'Research Agent' },
-    { id: 'analysis', x: '85%', y: '20%', icon: Brain, color: 'blue', label: 'Analysis Agent' },
-    { id: 'orchestrator', x: '50%', y: '50%', icon: Cpu, color: 'purple', label: 'Orchestrator', main: true },
-    { id: 'synthesis', x: '15%', y: '80%', icon: FileCode2, color: 'emerald', label: 'Synthesis Agent' },
-    { id: 'storage', x: '85%', y: '80%', icon: Database, color: 'cyan', label: 'Storage Agent' }
+    { id: 'research', x: '60px', y: '80px', icon: Bot, color: 'indigo', label: 'Research Agent' },
+    { id: 'analysis', x: '340px', y: '80px', icon: Brain, color: 'blue', label: 'Analysis Agent' },
+    { id: 'orchestrator', x: '200px', y: '200px', icon: Cpu, color: 'purple', label: 'Orchestrator', main: true },
+    { id: 'synthesis', x: '60px', y: '300px', icon: FileCode2, color: 'emerald', label: 'Synthesis Agent' },
+    { id: 'storage', x: '340px', y: '300px', icon: Database, color: 'cyan', label: 'Storage Agent' }
   ];
 
   return (
-    <div className="relative h-96 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-3xl overflow-hidden">
+    <div className="relative w-full h-96 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-3xl overflow-hidden" style={{ minWidth: '400px' }}>
       {/* Background Grid */}
       <svg className="absolute inset-0 w-full h-full opacity-5">
         <defs>
@@ -224,7 +224,7 @@ const AgentFlowVisualization = () => {
       </svg>
 
       {/* Animated Connection Lines */}
-      <svg className="absolute inset-0 w-full h-full">
+      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="flowGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="#6366f1" stopOpacity="0" />
@@ -239,18 +239,18 @@ const AgentFlowVisualization = () => {
         </defs>
         
         {/* Dynamic connection paths */}
-        <g className="opacity-30">
-          <path d="M 15% 20% Q 32.5% 35% 50% 50%" stroke="#6366f1" strokeWidth="2" fill="none" strokeDasharray="5,5">
-            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+        <g>
+          <path d="M 60 80 Q 120 120 200 200" stroke="#6366f1" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
+            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
           </path>
-          <path d="M 85% 20% Q 67.5% 35% 50% 50%" stroke="#3b82f6" strokeWidth="2" fill="none" strokeDasharray="5,5">
-            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+          <path d="M 340 80 Q 280 120 200 200" stroke="#3b82f6" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
+            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
           </path>
-          <path d="M 15% 80% Q 32.5% 65% 50% 50%" stroke="#10b981" strokeWidth="2" fill="none" strokeDasharray="5,5">
-            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+          <path d="M 60 300 Q 120 260 200 200" stroke="#10b981" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
+            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
           </path>
-          <path d="M 85% 80% Q 67.5% 65% 50% 50%" stroke="#06b6d4" strokeWidth="2" fill="none" strokeDasharray="5,5">
-            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+          <path d="M 340 300 Q 280 260 200 200" stroke="#06b6d4" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
+            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
           </path>
         </g>
 
@@ -258,22 +258,18 @@ const AgentFlowVisualization = () => {
         {dataPackets.map((packet, i) => (
           <circle
             key={packet}
-            r="3"
+            r="5"
             fill="#6366f1"
-            opacity="0.8"
-            className="animate-ping"
-            style={{
-              animation: `dataFlow${i % 4} 3s linear infinite`,
-            }}
+            opacity="1"
           >
             <animateMotion
-              dur="3s"
+              dur="2s"
               repeatCount="1"
               path={
-                i % 4 === 0 ? "M 15% 20% Q 32.5% 35% 50% 50%" :
-                i % 4 === 1 ? "M 85% 20% Q 67.5% 35% 50% 50%" :
-                i % 4 === 2 ? "M 15% 80% Q 32.5% 65% 50% 50%" :
-                "M 85% 80% Q 67.5% 65% 50% 50%"
+                i % 4 === 0 ? "M 60 80 Q 120 120 200 200" :
+                i % 4 === 1 ? "M 340 80 Q 280 120 200 200" :
+                i % 4 === 2 ? "M 60 300 Q 120 260 200 200" :
+                "M 340 300 Q 280 260 200 200"
               }
             />
           </circle>
@@ -289,10 +285,14 @@ const AgentFlowVisualization = () => {
         return (
           <div
             key={agent.id}
-            className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
+            className={`absolute transition-all duration-500 ${
               isActive ? 'scale-110' : 'scale-100'
             }`}
-            style={{ left: agent.x, top: agent.y }}
+            style={{ 
+              left: agent.x, 
+              top: agent.y,
+              transform: 'translate(-50%, -50%)'
+            }}
           >
             {/* Pulse effect for active agent */}
             {isActive && (
@@ -768,7 +768,7 @@ export default function GradientLogic() {
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">What We&apos;re Building</h2>
-            <p className="text-lg text-slate-600">Live projects powered by cutting-edge AI orchestration</p>
+            <p className="text-lg text-slate-600">Current projects showcasing our multi-agent orchestration expertise</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -904,7 +904,7 @@ export default function GradientLogic() {
               <Button asChild size="lg" className="rounded-full bg-white text-slate-900 hover:bg-slate-100">
                 <a href="mailto:hello@gradient-logic.com">
                   <Mail className="h-5 w-5 mr-2" />
-                  hello@gradient-logic.com
+                  Email Us
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-full border-white text-white hover:bg-white/10">
@@ -915,10 +915,7 @@ export default function GradientLogic() {
               </Button>
             </div>
 
-            <div className="inline-flex items-center gap-2 text-sm text-slate-400">
-              <Calendar className="h-4 w-4" />
-              <span>Typically respond within 24 hours</span>
-            </div>
+
           </div>
         </div>
       </section>
