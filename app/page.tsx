@@ -1,12 +1,19 @@
 'use client'
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, MessageSquare, Brain, Shield, Calendar, Mail, Search, Lightbulb, Wrench, Rocket, Network, Bot, Workflow, Cpu, Database, Zap, Activity, CheckCircle2, TrendingUp, FileCode2 } from "lucide-react";
+import { ArrowRight, MessageSquare, Brain, Shield, Calendar, Mail, Search, Lightbulb, Wrench, Rocket, Network, Bot, Workflow, Cpu, Database, Zap, Activity, CheckCircle2, TrendingUp, FileCode2, Timer, Award, BarChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 // Animated Background Component
 const AnimatedBackground = () => {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <div className="absolute inset-0 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-blue-50" />
@@ -19,23 +26,9 @@ const AnimatedBackground = () => {
         </defs>
         <rect width="100%" height="100%" fill="url(#grid)" />
       </svg>
-      {/* Floating Orbs */}
-      <motion.div 
-        className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl"
-        animate={{ 
-          x: [0, 100, 0],
-          y: [0, -50, 0],
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-      />
-      <motion.div 
-        className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl"
-        animate={{ 
-          x: [0, -100, 0],
-          y: [0, 50, 0],
-        }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-      />
+      {/* Simple animated orbs without framer-motion */}
+      <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse" />
     </div>
   );
 };
@@ -94,12 +87,7 @@ const LiveMonitoringDashboard = () => {
           <span className="text-slate-400">All systems operational</span>
         </div>
         <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-          <motion.div 
-            className="h-full bg-gradient-to-r from-green-400 to-blue-400"
-            initial={{ width: "0%" }}
-            animate={{ width: "100%" }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
+          <div className="h-full bg-gradient-to-r from-green-400 to-blue-400 animate-pulse" />
         </div>
       </div>
     </div>
@@ -109,8 +97,10 @@ const LiveMonitoringDashboard = () => {
 // Animated Code Terminal Component
 const CodeTerminal = () => {
   const [lines, setLines] = useState<string[]>([]);
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
+    setMounted(true);
     const codeLines = [
       "$ mcp init multi-agent-system",
       "✓ Initializing MCP server...",
@@ -142,6 +132,8 @@ const CodeTerminal = () => {
     return () => clearInterval(interval);
   }, []);
 
+  if (!mounted) return null;
+
   return (
     <div className="bg-slate-900 rounded-2xl p-6 font-mono text-sm shadow-2xl border border-slate-800">
       <div className="flex items-center gap-2 mb-4">
@@ -153,30 +145,22 @@ const CodeTerminal = () => {
         <span className="text-slate-500 text-xs">terminal</span>
       </div>
       <div className="space-y-1 min-h-[300px]">
-        <AnimatePresence>
-          {lines.map((line, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className={`${
-                line.startsWith('$') ? 'text-green-400' :
-                line.startsWith('✓') ? 'text-blue-400' :
-                line.startsWith('→') ? 'text-purple-400' :
-                line.startsWith('[INFO]') ? 'text-cyan-400' :
-                line.startsWith('[SUCCESS]') ? 'text-green-400' :
-                'text-slate-400'
-              }`}
-            >
-              {line}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-        <motion.span
-          className="inline-block w-2 h-4 bg-green-400"
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.5, repeat: Infinity }}
-        />
+        {lines.map((line, i) => (
+          <div
+            key={i}
+            className={`${
+              line.startsWith('$') ? 'text-green-400' :
+              line.startsWith('✓') ? 'text-blue-400' :
+              line.startsWith('→') ? 'text-purple-400' :
+              line.startsWith('[INFO]') ? 'text-cyan-400' :
+              line.startsWith('[SUCCESS]') ? 'text-green-400' :
+              'text-slate-400'
+            } transition-opacity duration-200`}
+          >
+            {line}
+          </div>
+        ))}
+        <span className="inline-block w-2 h-4 bg-green-400 animate-pulse" />
       </div>
     </div>
   );
@@ -188,23 +172,19 @@ const AgentFlowVisualization = () => {
     <div className="relative h-64">
       <svg className="absolute inset-0 w-full h-full">
         {/* Connection Lines */}
-        <motion.path
+        <path
           d="M 100 50 Q 200 100 300 50"
           stroke="url(#gradient1)"
           strokeWidth="2"
           fill="none"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 2, repeat: Infinity }}
+          className="animate-pulse"
         />
-        <motion.path
+        <path
           d="M 100 150 Q 200 100 300 150"
           stroke="url(#gradient2)"
           strokeWidth="2"
           fill="none"
-          initial={{ pathLength: 0 }}
-          animate={{ pathLength: 1 }}
-          transition={{ duration: 2, delay: 0.5, repeat: Infinity }}
+          className="animate-pulse"
         />
         <defs>
           <linearGradient id="gradient1">
@@ -219,46 +199,30 @@ const AgentFlowVisualization = () => {
       </svg>
       
       {/* Agent Nodes */}
-      <motion.div 
-        className="absolute left-10 top-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200"
-        whileHover={{ scale: 1.05 }}
-      >
+      <div className="absolute left-10 top-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
         <Bot className="h-6 w-6 text-indigo-600" />
         <p className="text-xs mt-1">Research</p>
-      </motion.div>
+      </div>
       
-      <motion.div 
-        className="absolute left-1/2 top-20 -translate-x-1/2 bg-gradient-to-br from-indigo-500 to-blue-500 text-white rounded-xl p-3 shadow-lg"
-        animate={{ y: [0, -5, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      >
+      <div className="absolute left-1/2 top-20 -translate-x-1/2 bg-gradient-to-br from-indigo-500 to-blue-500 text-white rounded-xl p-3 shadow-lg">
         <Cpu className="h-6 w-6" />
         <p className="text-xs mt-1">Orchestrator</p>
-      </motion.div>
+      </div>
       
-      <motion.div 
-        className="absolute right-10 top-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200"
-        whileHover={{ scale: 1.05 }}
-      >
+      <div className="absolute right-10 top-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
         <Brain className="h-6 w-6 text-blue-600" />
         <p className="text-xs mt-1">Analysis</p>
-      </motion.div>
+      </div>
       
-      <motion.div 
-        className="absolute left-10 bottom-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200"
-        whileHover={{ scale: 1.05 }}
-      >
+      <div className="absolute left-10 bottom-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
         <FileCode2 className="h-6 w-6 text-purple-600" />
         <p className="text-xs mt-1">Synthesis</p>
-      </motion.div>
+      </div>
       
-      <motion.div 
-        className="absolute right-10 bottom-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200"
-        whileHover={{ scale: 1.05 }}
-      >
+      <div className="absolute right-10 bottom-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
         <Database className="h-6 w-6 text-cyan-600" />
         <p className="text-xs mt-1">Storage</p>
-      </motion.div>
+      </div>
     </div>
   );
 };
@@ -293,20 +257,12 @@ export default function GradientLogic() {
       {/* HERO with Animated Elements */}
       <section id="home" className="relative py-24 px-4 overflow-hidden">
         <div className="mx-auto max-w-7xl relative z-10">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-12"
-          >
-            <motion.div 
-              className="inline-block mb-4 px-4 py-2 bg-gradient-to-r from-indigo-100 to-blue-100 rounded-full"
-              whileHover={{ scale: 1.05 }}
-            >
+          <div className="text-center mb-12 opacity-0 animate-[fadeIn_0.6s_forwards]">
+            <div className="inline-block mb-4 px-4 py-2 bg-gradient-to-r from-indigo-100 to-blue-100 rounded-full hover:scale-105 transition-transform">
               <span className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
                 Multi-Agent Orchestration Experts
               </span>
-            </motion.div>
+            </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
               <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Build </span>
               <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Autonomous AI</span>
@@ -325,24 +281,100 @@ export default function GradientLogic() {
                 <a href="#work">See Live Demos</a>
               </Button>
             </div>
-          </motion.div>
+          </div>
 
           {/* Hero Visualization Grid */}
           <div className="grid md:grid-cols-2 gap-8 mt-16">
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-            >
+            <div className="opacity-0 animate-[slideInLeft_0.5s_0.3s_forwards]">
               <LiveMonitoringDashboard />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.4 }}
-            >
+            </div>
+            <div className="opacity-0 animate-[slideInRight_0.5s_0.4s_forwards]">
               <CodeTerminal />
-            </motion.div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* GARTNER INSIGHTS SECTION */}
+      <section className="py-20 px-4 bg-gradient-to-r from-slate-50 to-indigo-50 relative">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-white rounded-full shadow-md">
+              <Award className="h-5 w-5 text-indigo-600" />
+              <span className="text-sm font-semibold text-slate-700">Industry Recognition</span>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              The Future is <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Agentic AI</span>
+            </h2>
+            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
+              According to Gartner, by 2028, 33% of enterprise software applications will include agentic AI, 
+              up from less than 1% in 2024. This represents one of the most significant shifts in enterprise technology.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border-indigo-200 hover:shadow-xl transition-all">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <BarChart className="h-8 w-8 text-indigo-600" />
+                  <CardTitle className="text-lg">Strategic Technology Trend</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-600 mb-3">
+                  Gartner identifies agentic AI as a top strategic technology trend for 2025, 
+                  predicting it will fundamentally change how businesses operate.
+                </p>
+                <div className="pt-3 border-t border-slate-100">
+                  <div className="text-3xl font-bold text-indigo-600">15%</div>
+                  <p className="text-xs text-slate-500">of decisions will be made autonomously by 2028</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-blue-200 hover:shadow-xl transition-all">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <TrendingUp className="h-8 w-8 text-blue-600" />
+                  <CardTitle className="text-lg">Exponential Growth</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-600 mb-3">
+                  The agentic AI market is experiencing unprecedented growth, with enterprises 
+                  rapidly adopting multi-agent systems for complex automation.
+                </p>
+                <div className="pt-3 border-t border-slate-100">
+                  <div className="text-3xl font-bold text-blue-600">33x</div>
+                  <p className="text-xs text-slate-500">growth in enterprise adoption by 2028</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-purple-200 hover:shadow-xl transition-all">
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <Zap className="h-8 w-8 text-purple-600" />
+                  <CardTitle className="text-lg">Competitive Advantage</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-slate-600 mb-3">
+                  Early adopters of agentic AI are seeing 40% improvement in operational efficiency 
+                  and 25% reduction in decision-making time.
+                </p>
+                <div className="pt-3 border-t border-slate-100">
+                  <div className="text-3xl font-bold text-purple-600">40%</div>
+                  <p className="text-xs text-slate-500">efficiency gains for early adopters</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-sm text-slate-500 italic">
+              &ldquo;Agentic AI will be the defining technology of the next decade&rdquo; - Industry Analysts
+            </p>
           </div>
         </div>
       </section>
@@ -350,12 +382,7 @@ export default function GradientLogic() {
       {/* AGENT FLOW SECTION */}
       <section className="py-20 px-4 relative">
         <div className="mx-auto max-w-7xl">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
                 Intelligent Agent Orchestration
@@ -364,7 +391,7 @@ export default function GradientLogic() {
             <p className="text-lg text-slate-600 max-w-2xl mx-auto">
               Real-time coordination between specialized AI agents, working together to solve complex problems
             </p>
-          </motion.div>
+          </div>
           
           <div className="bg-white/80 backdrop-blur rounded-3xl p-8 shadow-xl border border-slate-200">
             <AgentFlowVisualization />
@@ -375,15 +402,10 @@ export default function GradientLogic() {
       {/* WHAT WE DO - Services with Hover Effects */}
       <section id="services" className="py-20 px-4 bg-gradient-to-b from-slate-50 to-white relative">
         <div className="mx-auto max-w-7xl">
-          <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">What We Build</h2>
             <p className="text-lg text-slate-600">Enterprise-grade AI systems that scale</p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
@@ -430,15 +452,12 @@ export default function GradientLogic() {
                 gradient: "from-yellow-500 to-orange-500"
               }
             ].map((service, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                className="opacity-0 animate-[fadeInUp_0.5s_forwards]"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <Card className="h-full hover:shadow-2xl transition-all duration-300 border-slate-200 overflow-hidden group">
+                <Card className="h-full hover:shadow-2xl transition-all duration-300 border-slate-200 overflow-hidden group hover:-translate-y-1">
                   <div className={`h-1 bg-gradient-to-r ${service.gradient}`} />
                   <CardHeader>
                     <CardTitle className="flex items-center gap-3">
@@ -460,7 +479,7 @@ export default function GradientLogic() {
                     </ul>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -477,44 +496,35 @@ export default function GradientLogic() {
               { label: "Uptime", value: "99.9%", icon: <TrendingUp /> },
               { label: "Avg Response Time", value: "<50ms", icon: <Zap /> }
             ].map((metric, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, scale: 0.5 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center"
+                className="text-center opacity-0 animate-[scaleIn_0.5s_forwards]"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="inline-flex p-3 rounded-full bg-white/10 mb-4">
                   {React.cloneElement(metric.icon, { className: "h-6 w-6" })}
                 </div>
-                <motion.div 
-                  className="text-4xl font-bold mb-2"
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  transition={{ delay: index * 0.1 + 0.2 }}
-                >
+                <div className="text-4xl font-bold mb-2">
                   {metric.value}
-                </motion.div>
+                </div>
                 <div className="text-sm opacity-90">{metric.label}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* HOW WE WORK with Icons */}
+      {/* HOW WE WORK with PoC Timeline */}
       <section id="approach" className="py-20 px-4 relative">
         <div className="mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">How We Work</h2>
-            <p className="text-lg text-slate-600">From concept to production in weeks, not months</p>
-          </motion.div>
+            <p className="text-lg text-slate-600 mb-6">From concept to production in weeks, not months</p>
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full">
+              <Timer className="h-5 w-5 text-green-600" />
+              <span className="text-sm font-semibold text-green-800">Proof of Concept delivered in just 1 week</span>
+            </div>
+          </div>
 
           <div className="grid md:grid-cols-4 gap-6">
             {[
@@ -523,51 +533,84 @@ export default function GradientLogic() {
                 title: "Discover",
                 description: "Map your workflows and identify automation opportunities",
                 icon: <Search className="h-8 w-8" />,
-                color: "indigo"
+                color: "indigo",
+                timeline: "Day 1-2"
               },
               {
                 step: "02",
-                title: "Design",
-                description: "Architect multi-agent systems tailored to your needs",
+                title: "Design & PoC",
+                description: "Architect multi-agent systems and deliver working proof of concept",
                 icon: <Lightbulb className="h-8 w-8" />,
-                color: "blue"
+                color: "blue",
+                timeline: "Day 3-7",
+                highlight: true
               },
               {
                 step: "03",
                 title: "Build",
                 description: "Develop and integrate with your existing infrastructure",
                 icon: <Wrench className="h-8 w-8" />,
-                color: "purple"
+                color: "purple",
+                timeline: "Week 2-3"
               },
               {
                 step: "04",
                 title: "Deploy",
                 description: "Launch, monitor, and continuously optimize",
                 icon: <Rocket className="h-8 w-8" />,
-                color: "green"
+                color: "green",
+                timeline: "Week 4"
               }
             ].map((step, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="relative"
+                className="relative opacity-0 animate-[fadeInUp_0.5s_forwards]"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 {index < 3 && (
                   <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-slate-300 to-transparent" />
                 )}
-                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-slate-200">
+                <div className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border ${step.highlight ? 'border-green-400 ring-2 ring-green-100' : 'border-slate-200'}`}>
+                  {step.highlight && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span className="bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xs px-3 py-1 rounded-full font-semibold">
+                        PoC Ready
+                      </span>
+                    </div>
+                  )}
                   <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-${step.color}-500 to-${step.color}-600 flex items-center justify-center text-white mb-4`}>
                     {step.icon}
                   </div>
                   <div className="text-3xl font-bold text-slate-300 mb-2">{step.step}</div>
                   <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                  <p className="text-sm text-slate-600">{step.description}</p>
+                  <p className="text-sm text-slate-600 mb-3">{step.description}</p>
+                  <div className="pt-3 border-t border-slate-100">
+                    <span className="text-xs font-semibold text-indigo-600">{step.timeline}</span>
+                  </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
+          </div>
+
+          <div className="mt-12 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-8 text-center">
+            <h3 className="text-2xl font-bold mb-4">Why Our Approach Works</h3>
+            <div className="grid md:grid-cols-3 gap-6 text-left">
+              <div className="bg-white rounded-xl p-4">
+                <Timer className="h-6 w-6 text-indigo-600 mb-2" />
+                <h4 className="font-semibold mb-1">Rapid Validation</h4>
+                <p className="text-sm text-slate-600">See real results in 1 week with a working PoC tailored to your use case</p>
+              </div>
+              <div className="bg-white rounded-xl p-4">
+                <Bot className="h-6 w-6 text-blue-600 mb-2" />
+                <h4 className="font-semibold mb-1">Production-Ready</h4>
+                <p className="text-sm text-slate-600">Our PoCs are built on the same foundation as production systems</p>
+              </div>
+              <div className="bg-white rounded-xl p-4">
+                <Shield className="h-6 w-6 text-green-600 mb-2" />
+                <h4 className="font-semibold mb-1">Risk-Free</h4>
+                <p className="text-sm text-slate-600">Test the value before full commitment with minimal investment</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -575,15 +618,10 @@ export default function GradientLogic() {
       {/* WHAT WE'RE BUILDING */}
       <section id="work" className="py-20 px-4 bg-slate-50 relative">
         <div className="mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">What We&apos;re Building</h2>
             <p className="text-lg text-slate-600">Live projects powered by cutting-edge AI orchestration</p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {[
@@ -616,14 +654,10 @@ export default function GradientLogic() {
                 metrics: { agents: 20, requests: "50K/day", latency: "50ms" }
               }
             ].map((project, index) => (
-              <motion.div
+              <div
                 key={index}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-slate-200"
+                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-1 opacity-0 animate-[fadeInUp_0.5s_forwards]"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="flex items-start justify-between mb-4">
                   <h3 className="text-xl font-semibold">{project.title}</h3>
@@ -659,7 +693,7 @@ export default function GradientLogic() {
                     <p className="text-sm font-semibold">{project.metrics.latency}</p>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -668,12 +702,7 @@ export default function GradientLogic() {
       {/* ABOUT */}
       <section id="about" className="py-20 px-4 relative">
         <div className="mx-auto max-w-7xl">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="grid md:grid-cols-2 gap-12 items-center"
-          >
+          <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
                 Pioneering the Future of
@@ -707,7 +736,7 @@ export default function GradientLogic() {
                 <AgentFlowVisualization />
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -717,11 +746,7 @@ export default function GradientLogic() {
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-blue-600/20" />
         </div>
         <div className="mx-auto max-w-4xl text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <div className="opacity-0 animate-[fadeIn_0.5s_forwards]">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Build Something Extraordinary?</h2>
             <p className="text-lg text-slate-300 mb-8">
               Let&apos;s discuss how multi-agent AI can transform your business
@@ -746,7 +771,7 @@ export default function GradientLogic() {
               <Calendar className="h-4 w-4" />
               <span>Typically respond within 24 hours</span>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -756,6 +781,29 @@ export default function GradientLogic() {
           <p>&copy; 2025 Gradient Logic. Building the autonomous future.</p>
         </div>
       </footer>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideInLeft {
+          from { opacity: 0; transform: translateX(-30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInRight {
+          from { opacity: 0; transform: translateX(30px); }
+          to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes scaleIn {
+          from { opacity: 0; transform: scale(0.8); }
+          to { opacity: 1; transform: scale(1); }
+        }
+      `}</style>
     </div>
   );
 }
