@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+
+# next/build
+.next/
+out/            # build output (Actions uploads this as artifact)
+.next.static/
+dist/
+
+# env & local
+.env
+.env.*
+!.env.example
+
+# tools
+.vercel/
+.turbo/
+coverage/
+
+# OS/editor
+.DS_Store
+*.log
