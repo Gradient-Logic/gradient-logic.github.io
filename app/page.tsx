@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, MessageSquare, Brain, LineChart, Shield, Calendar, Mail, Github, Linkedin, ExternalLink } from "lucide-react";
@@ -27,7 +28,7 @@ export default function GradientLogic() {
           </nav>
           <div className="flex items-center gap-2">
             <Button asChild className="rounded-2xl">
-              <a href="#contact"><MessageSquare className="h-4 w-4 mr-2"/>Let's talk</a>
+              <a href="#contact"><MessageSquare className="h-4 w-4 mr-2"/>Let&apos;s talk</a>
             </Button>
           </div>
         </div>
@@ -182,8 +183,8 @@ export default function GradientLogic() {
       {/* CONTACT */}
       <section id="contact" className="bg-white border-y border-slate-200">
         <div className="mx-auto max-w-7xl px-4 py-16">
-          <h2 className="text-2xl md:text-4xl font-bold">Let’s talk</h2>
-          <p className="mt-2 text-slate-600">Tell us about your goals and we’ll suggest a focused starting point.</p>
+          <h2 className="text-2xl md:text-4xl font-bold">Let&apos;s talk</h2>
+          <p className="mt-2 text-slate-600">Tell us about your goals and we&apos;ll suggest a focused starting point.</p>
           <div className="mt-8 grid lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
