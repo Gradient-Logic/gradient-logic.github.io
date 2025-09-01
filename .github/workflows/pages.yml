@@ -23,6 +23,9 @@ jobs:
           node-version: 20
       - run: npm ci
       - run: npm run build               # creates ./out
+      - run: |
+          touch ./out/.nojekyll
+          cp CNAME ./out/CNAME || true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./out                    # <-- must exist and contain index.html
