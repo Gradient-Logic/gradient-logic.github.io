@@ -179,60 +179,197 @@ const CodeTerminal = () => {
 
 // Agent Flow Visualization
 const AgentFlowVisualization = () => {
+  const [activeAgent, setActiveAgent] = useState(0);
+  const [dataPackets, setDataPackets] = useState<number[]>([]);
+  
+  useEffect(() => {
+    // Rotate active agent
+    const agentInterval = setInterval(() => {
+      setActiveAgent(prev => (prev + 1) % 5);
+    }, 1500);
+    
+    // Add data packets
+    const packetInterval = setInterval(() => {
+      setDataPackets(prev => {
+        const newPackets = [...prev, Date.now()];
+        // Keep only last 5 packets
+        return newPackets.slice(-5);
+      });
+    }, 800);
+    
+    return () => {
+      clearInterval(agentInterval);
+      clearInterval(packetInterval);
+    };
+  }, []);
+
+  const agents = [
+    { id: 'research', x: '15%', y: '20%', icon: Bot, color: 'indigo', label: 'Research Agent' },
+    { id: 'analysis', x: '85%', y: '20%', icon: Brain, color: 'blue', label: 'Analysis Agent' },
+    { id: 'orchestrator', x: '50%', y: '50%', icon: Cpu, color: 'purple', label: 'Orchestrator', main: true },
+    { id: 'synthesis', x: '15%', y: '80%', icon: FileCode2, color: 'emerald', label: 'Synthesis Agent' },
+    { id: 'storage', x: '85%', y: '80%', icon: Database, color: 'cyan', label: 'Storage Agent' }
+  ];
+
   return (
-    <div className="relative h-64">
-      <svg className="absolute inset-0 w-full h-full">
-        {/* Connection Lines */}
-        <path
-          d="M 100 50 Q 200 100 300 50"
-          stroke="url(#gradient1)"
-          strokeWidth="2"
-          fill="none"
-          className="animate-pulse"
-        />
-        <path
-          d="M 100 150 Q 200 100 300 150"
-          stroke="url(#gradient2)"
-          strokeWidth="2"
-          fill="none"
-          className="animate-pulse"
-        />
+    <div className="relative h-96 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-3xl overflow-hidden">
+      {/* Background Grid */}
+      <svg className="absolute inset-0 w-full h-full opacity-5">
         <defs>
-          <linearGradient id="gradient1">
-            <stop offset="0%" stopColor="#6366f1" />
-            <stop offset="100%" stopColor="#3b82f6" />
+          <pattern id="grid2" width="30" height="30" patternUnits="userSpaceOnUse">
+            <circle cx="15" cy="15" r="1" fill="currentColor" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#grid2)" />
+      </svg>
+
+      {/* Animated Connection Lines */}
+      <svg className="absolute inset-0 w-full h-full">
+        <defs>
+          <linearGradient id="flowGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#6366f1" stopOpacity="0" />
+            <stop offset="50%" stopColor="#6366f1" stopOpacity="1" />
+            <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
           </linearGradient>
-          <linearGradient id="gradient2">
-            <stop offset="0%" stopColor="#3b82f6" />
-            <stop offset="100%" stopColor="#06b6d4" />
+          <linearGradient id="flowGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+            <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
+            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
           </linearGradient>
         </defs>
+        
+        {/* Dynamic connection paths */}
+        <g className="opacity-30">
+          <path d="M 15% 20% Q 32.5% 35% 50% 50%" stroke="#6366f1" strokeWidth="2" fill="none" strokeDasharray="5,5">
+            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+          </path>
+          <path d="M 85% 20% Q 67.5% 35% 50% 50%" stroke="#3b82f6" strokeWidth="2" fill="none" strokeDasharray="5,5">
+            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+          </path>
+          <path d="M 15% 80% Q 32.5% 65% 50% 50%" stroke="#10b981" strokeWidth="2" fill="none" strokeDasharray="5,5">
+            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+          </path>
+          <path d="M 85% 80% Q 67.5% 65% 50% 50%" stroke="#06b6d4" strokeWidth="2" fill="none" strokeDasharray="5,5">
+            <animate attributeName="stroke-dashoffset" from="0" to="-10" dur="1s" repeatCount="indefinite" />
+          </path>
+        </g>
+
+        {/* Data flow particles */}
+        {dataPackets.map((packet, i) => (
+          <circle
+            key={packet}
+            r="3"
+            fill="#6366f1"
+            opacity="0.8"
+            className="animate-ping"
+            style={{
+              animation: `dataFlow${i % 4} 3s linear infinite`,
+            }}
+          >
+            <animateMotion
+              dur="3s"
+              repeatCount="1"
+              path={
+                i % 4 === 0 ? "M 15% 20% Q 32.5% 35% 50% 50%" :
+                i % 4 === 1 ? "M 85% 20% Q 67.5% 35% 50% 50%" :
+                i % 4 === 2 ? "M 15% 80% Q 32.5% 65% 50% 50%" :
+                "M 85% 80% Q 67.5% 65% 50% 50%"
+              }
+            />
+          </circle>
+        ))}
       </svg>
-      
+
       {/* Agent Nodes */}
-      <div className="absolute left-10 top-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
-        <Bot className="h-6 w-6 text-indigo-600" />
-        <p className="text-xs mt-1">Research</p>
+      {agents.map((agent, index) => {
+        const Icon = agent.icon;
+        const isActive = activeAgent === index;
+        const isMain = agent.main;
+        
+        return (
+          <div
+            key={agent.id}
+            className={`absolute transform -translate-x-1/2 -translate-y-1/2 transition-all duration-500 ${
+              isActive ? 'scale-110' : 'scale-100'
+            }`}
+            style={{ left: agent.x, top: agent.y }}
+          >
+            {/* Pulse effect for active agent */}
+            {isActive && (
+              <div className={`absolute inset-0 rounded-2xl bg-${agent.color}-500 animate-ping opacity-20`} />
+            )}
+            
+            {/* Agent card */}
+            <div className={`relative ${
+              isMain 
+                ? `bg-gradient-to-br from-${agent.color}-500 to-${agent.color}-600 text-white` 
+                : 'bg-white'
+            } rounded-2xl p-4 shadow-xl border ${
+              isMain ? 'border-transparent' : isActive ? `border-${agent.color}-400 ring-2 ring-${agent.color}-200` : 'border-slate-200'
+            } hover:scale-105 transition-transform cursor-pointer`}>
+              
+              {/* Status indicator */}
+              <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
+                isActive ? 'bg-green-500' : 'bg-slate-300'
+              } ${isActive ? 'animate-pulse' : ''}`} />
+              
+              {/* Icon and label */}
+              <div className="flex flex-col items-center">
+                <Icon className={`h-8 w-8 mb-2 ${
+                  isMain ? 'text-white' : `text-${agent.color}-600`
+                }`} />
+                <p className={`text-xs font-medium ${
+                  isMain ? 'text-white' : 'text-slate-700'
+                }`}>{agent.label}</p>
+                
+                {/* Activity indicator */}
+                {isActive && (
+                  <div className="mt-2 flex gap-1">
+                    <span className={`inline-block w-1 h-1 rounded-full bg-${agent.color}-400 animate-bounce`} style={{ animationDelay: '0ms' }} />
+                    <span className={`inline-block w-1 h-1 rounded-full bg-${agent.color}-400 animate-bounce`} style={{ animationDelay: '100ms' }} />
+                    <span className={`inline-block w-1 h-1 rounded-full bg-${agent.color}-400 animate-bounce`} style={{ animationDelay: '200ms' }} />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* Central status */}
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+        <div className="relative">
+          <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-indigo-400 to-blue-400 opacity-20 animate-pulse" />
+        </div>
       </div>
-      
-      <div className="absolute left-1/2 top-20 -translate-x-1/2 bg-gradient-to-br from-indigo-500 to-blue-500 text-white rounded-xl p-3 shadow-lg">
-        <Cpu className="h-6 w-6" />
-        <p className="text-xs mt-1">Orchestrator</p>
+
+      {/* Activity feed */}
+      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur rounded-lg p-3 shadow-lg">
+        <div className="flex items-center gap-2 mb-2">
+          <Activity className="h-4 w-4 text-green-500" />
+          <span className="text-xs font-semibold text-slate-700">Live Activity</span>
+        </div>
+        <div className="space-y-1">
+          {['Processing query...', 'Analyzing data...', 'Synthesizing results...'].map((status, i) => (
+            <div key={i} className={`text-xs text-slate-600 ${i === activeAgent % 3 ? 'opacity-100' : 'opacity-40'} transition-opacity`}>
+              {status}
+            </div>
+          ))}
+        </div>
       </div>
-      
-      <div className="absolute right-10 top-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
-        <Brain className="h-6 w-6 text-blue-600" />
-        <p className="text-xs mt-1">Analysis</p>
-      </div>
-      
-      <div className="absolute left-10 bottom-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
-        <FileCode2 className="h-6 w-6 text-purple-600" />
-        <p className="text-xs mt-1">Synthesis</p>
-      </div>
-      
-      <div className="absolute right-10 bottom-8 bg-white rounded-xl p-3 shadow-lg border border-slate-200 hover:scale-105 transition-transform">
-        <Database className="h-6 w-6 text-cyan-600" />
-        <p className="text-xs mt-1">Storage</p>
+
+      {/* Metrics */}
+      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur rounded-lg p-3 shadow-lg">
+        <div className="grid grid-cols-2 gap-3 text-xs">
+          <div>
+            <p className="text-slate-500">Throughput</p>
+            <p className="font-semibold text-slate-700">1.2K/s</p>
+          </div>
+          <div>
+            <p className="text-slate-500">Latency</p>
+            <p className="font-semibold text-green-600">42ms</p>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -404,9 +541,7 @@ export default function GradientLogic() {
             </p>
           </div>
           
-          <div className="bg-white/80 backdrop-blur rounded-3xl p-8 shadow-xl border border-slate-200">
-            <AgentFlowVisualization />
-          </div>
+          <AgentFlowVisualization />
         </div>
       </section>
 
@@ -747,9 +882,7 @@ export default function GradientLogic() {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-gradient-to-br from-indigo-100 to-blue-100 rounded-3xl p-8">
-                <AgentFlowVisualization />
-              </div>
+              <AgentFlowVisualization />
             </div>
           </div>
         </div>
