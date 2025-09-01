@@ -101,6 +101,11 @@ const CodeTerminal = () => {
   
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
     const codeLines = [
       "$ mcp init multi-agent-system",
       "✓ Initializing MCP server...",
@@ -122,7 +127,10 @@ const CodeTerminal = () => {
     let index = 0;
     const interval = setInterval(() => {
       if (index < codeLines.length) {
-        setLines(prev => [...prev, codeLines[index]]);
+        const line = codeLines[index];
+        if (line !== undefined) {
+          setLines(prev => [...prev, line]);
+        }
         index++;
       } else {
         setLines([]);
@@ -130,7 +138,7 @@ const CodeTerminal = () => {
       }
     }, 300);
     return () => clearInterval(interval);
-  }, []);
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -145,21 +153,24 @@ const CodeTerminal = () => {
         <span className="text-slate-500 text-xs">terminal</span>
       </div>
       <div className="space-y-1 min-h-[300px]">
-        {lines.map((line, i) => (
-          <div
-            key={i}
-            className={`${
-              line.startsWith('$') ? 'text-green-400' :
-              line.startsWith('✓') ? 'text-blue-400' :
-              line.startsWith('→') ? 'text-purple-400' :
-              line.startsWith('[INFO]') ? 'text-cyan-400' :
-              line.startsWith('[SUCCESS]') ? 'text-green-400' :
-              'text-slate-400'
-            } transition-opacity duration-200`}
-          >
-            {line}
-          </div>
-        ))}
+        {lines && lines.length > 0 && lines.map((line, i) => {
+          if (!line || typeof line !== 'string') return null;
+          return (
+            <div
+              key={i}
+              className={`${
+                line.startsWith('$') ? 'text-green-400' :
+                line.startsWith('✓') ? 'text-blue-400' :
+                line.startsWith('→') ? 'text-purple-400' :
+                line.startsWith('[INFO]') ? 'text-cyan-400' :
+                line.startsWith('[SUCCESS]') ? 'text-green-400' :
+                'text-slate-400'
+              } transition-opacity duration-200`}
+            >
+              {line}
+            </div>
+          );
+        })}
         <span className="inline-block w-2 h-4 bg-green-400 animate-pulse" />
       </div>
     </div>
@@ -470,11 +481,13 @@ export default function GradientLogic() {
                   <CardContent>
                     <p className="text-sm text-slate-600 mb-4">{service.description}</p>
                     <ul className="space-y-2">
-                      {service.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm">
-                          <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span className="text-slate-700">{feature}</span>
-                        </li>
+                      {service.features && service.features.map((feature, i) => (
+                        feature ? (
+                          <li key={i} className="flex items-start gap-2 text-sm">
+                            <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                            <span className="text-slate-700">{feature}</span>
+                          </li>
+                        ) : null
                       ))}
                     </ul>
                   </CardContent>
@@ -672,10 +685,12 @@ export default function GradientLogic() {
                 <p className="text-slate-600 mb-4">{project.description}</p>
                 
                 <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tech.map((tech, i) => (
-                    <span key={i} className="text-xs px-2 py-1 bg-slate-100 text-slate-700 rounded-lg">
-                      {tech}
-                    </span>
+                  {project.tech && project.tech.map((tech, i) => (
+                    tech ? (
+                      <span key={i} className="text-xs px-2 py-1 bg-slate-100 text-slate-700 rounded-lg">
+                        {tech}
+                      </span>
+                    ) : null
                   ))}
                 </div>
 
