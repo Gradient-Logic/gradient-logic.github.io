@@ -180,194 +180,245 @@ const CodeTerminal = () => {
 // Agent Flow Visualization
 const AgentFlowVisualization = () => {
   const [activeAgent, setActiveAgent] = useState(0);
-  const [dataPackets, setDataPackets] = useState<number[]>([]);
+  const [activeConnection, setActiveConnection] = useState(0);
   
   useEffect(() => {
     // Rotate active agent
     const agentInterval = setInterval(() => {
       setActiveAgent(prev => (prev + 1) % 5);
-    }, 1500);
+    }, 2000);
     
-    // Add data packets
-    const packetInterval = setInterval(() => {
-      setDataPackets(prev => {
-        const newPackets = [...prev, Date.now()];
-        // Keep only last 5 packets
-        return newPackets.slice(-5);
-      });
-    }, 800);
+    // Rotate active connection
+    const connectionInterval = setInterval(() => {
+      setActiveConnection(prev => (prev + 1) % 4);
+    }, 500);
     
     return () => {
       clearInterval(agentInterval);
-      clearInterval(packetInterval);
+      clearInterval(connectionInterval);
     };
   }, []);
 
   const agents = [
-    { id: 'research', x: '60px', y: '80px', icon: Bot, color: 'indigo', label: 'Research Agent' },
-    { id: 'analysis', x: '340px', y: '80px', icon: Brain, color: 'blue', label: 'Analysis Agent' },
-    { id: 'orchestrator', x: '200px', y: '200px', icon: Cpu, color: 'purple', label: 'Orchestrator', main: true },
-    { id: 'synthesis', x: '60px', y: '300px', icon: FileCode2, color: 'emerald', label: 'Synthesis Agent' },
-    { id: 'storage', x: '340px', y: '300px', icon: Database, color: 'cyan', label: 'Storage Agent' }
+    { id: 'research', x: 100, y: 100, icon: Bot, color: 'indigo', label: 'Research' },
+    { id: 'analysis', x: 500, y: 100, icon: Brain, color: 'blue', label: 'Analysis' },
+    { id: 'orchestrator', x: 300, y: 250, icon: Cpu, color: 'purple', label: 'Orchestrator', main: true },
+    { id: 'synthesis', x: 100, y: 400, icon: FileCode2, color: 'emerald', label: 'Synthesis' },
+    { id: 'storage', x: 500, y: 400, icon: Database, color: 'cyan', label: 'Storage' }
+  ];
+
+  const connections = [
+    { from: agents[0], to: agents[2], color: '#6366f1' }, // Research to Orchestrator
+    { from: agents[1], to: agents[2], color: '#3b82f6' }, // Analysis to Orchestrator
+    { from: agents[3], to: agents[2], color: '#10b981' }, // Synthesis to Orchestrator
+    { from: agents[4], to: agents[2], color: '#06b6d4' }  // Storage to Orchestrator
   ];
 
   return (
-    <div className="relative w-full h-96 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-3xl overflow-hidden" style={{ minWidth: '400px' }}>
-      {/* Background Grid */}
-      <svg className="absolute inset-0 w-full h-full opacity-5">
-        <defs>
-          <pattern id="grid2" width="30" height="30" patternUnits="userSpaceOnUse">
-            <circle cx="15" cy="15" r="1" fill="currentColor" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid2)" />
-      </svg>
+    <div className="relative w-full mx-auto" style={{ maxWidth: '600px', height: '500px' }}>
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-indigo-50 rounded-3xl overflow-hidden shadow-xl">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 2px 2px, #6366f1 1px, transparent 1px)`,
+            backgroundSize: '32px 32px'
+          }} />
+        </div>
 
-      {/* Animated Connection Lines */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="flowGradient1" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6366f1" stopOpacity="0" />
-            <stop offset="50%" stopColor="#6366f1" stopOpacity="1" />
-            <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
-          </linearGradient>
-          <linearGradient id="flowGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
-            <stop offset="50%" stopColor="#3b82f6" stopOpacity="1" />
-            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-          </linearGradient>
-        </defs>
-        
-        {/* Dynamic connection paths */}
-        <g>
-          <path d="M 60 80 Q 120 120 200 200" stroke="#6366f1" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
-            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
-          </path>
-          <path d="M 340 80 Q 280 120 200 200" stroke="#3b82f6" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
-            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
-          </path>
-          <path d="M 60 300 Q 120 260 200 200" stroke="#10b981" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
-            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
-          </path>
-          <path d="M 340 300 Q 280 260 200 200" stroke="#06b6d4" strokeWidth="4" fill="none" strokeDasharray="10,5" opacity="0.8">
-            <animate attributeName="stroke-dashoffset" from="0" to="-15" dur="1s" repeatCount="indefinite" />
-          </path>
-        </g>
-
-        {/* Data flow particles */}
-        {dataPackets.map((packet, i) => (
-          <circle
-            key={packet}
-            r="5"
-            fill="#6366f1"
-            opacity="1"
-          >
-            <animateMotion
-              dur="2s"
-              repeatCount="1"
-              path={
-                i % 4 === 0 ? "M 60 80 Q 120 120 200 200" :
-                i % 4 === 1 ? "M 340 80 Q 280 120 200 200" :
-                i % 4 === 2 ? "M 60 300 Q 120 260 200 200" :
-                "M 340 300 Q 280 260 200 200"
-              }
-            />
-          </circle>
-        ))}
-      </svg>
-
-      {/* Agent Nodes */}
-      {agents.map((agent, index) => {
-        const Icon = agent.icon;
-        const isActive = activeAgent === index;
-        const isMain = agent.main;
-        
-        return (
-          <div
-            key={agent.id}
-            className={`absolute transition-all duration-500 ${
-              isActive ? 'scale-110' : 'scale-100'
-            }`}
-            style={{ 
-              left: agent.x, 
-              top: agent.y,
-              transform: 'translate(-50%, -50%)'
-            }}
-          >
-            {/* Pulse effect for active agent */}
-            {isActive && (
-              <div className={`absolute inset-0 rounded-2xl bg-${agent.color}-500 animate-ping opacity-20`} />
-            )}
+        {/* SVG for connections */}
+        <svg 
+          className="absolute inset-0 w-full h-full" 
+          viewBox="0 0 600 500" 
+          preserveAspectRatio="xMidYMid meet"
+          xmlns="http://www.w3.org/2000/svg"
+          style={{ zIndex: 1 }}
+        >
+          <defs>
+            {/* Arrow marker */}
+            <marker
+              id="arrowhead"
+              markerWidth="10"
+              markerHeight="7"
+              refX="9"
+              refY="3.5"
+              orient="auto"
+            >
+              <polygon
+                points="0 0, 10 3.5, 0 7"
+                fill="#6366f1"
+                opacity="0.6"
+              />
+            </marker>
             
-            {/* Agent card */}
-            <div className={`relative ${
-              isMain 
-                ? `bg-gradient-to-br from-${agent.color}-500 to-${agent.color}-600 text-white` 
-                : 'bg-white'
-            } rounded-2xl p-4 shadow-xl border ${
-              isMain ? 'border-transparent' : isActive ? `border-${agent.color}-400 ring-2 ring-${agent.color}-200` : 'border-slate-200'
-            } hover:scale-105 transition-transform cursor-pointer`}>
-              
-              {/* Status indicator */}
-              <div className={`absolute -top-1 -right-1 w-3 h-3 rounded-full ${
-                isActive ? 'bg-green-500' : 'bg-slate-300'
-              } ${isActive ? 'animate-pulse' : ''}`} />
-              
-              {/* Icon and label */}
-              <div className="flex flex-col items-center">
-                <Icon className={`h-8 w-8 mb-2 ${
-                  isMain ? 'text-white' : `text-${agent.color}-600`
-                }`} />
-                <p className={`text-xs font-medium ${
-                  isMain ? 'text-white' : 'text-slate-700'
-                }`}>{agent.label}</p>
+            {/* Gradient definitions */}
+            <linearGradient id="gradient-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.2" />
+              <stop offset="50%" stopColor="#6366f1" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#6366f1" stopOpacity="0.2" />
+            </linearGradient>
+            
+            <linearGradient id="gradient-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
+              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.2" />
+            </linearGradient>
+            
+            <linearGradient id="gradient-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
+              <stop offset="50%" stopColor="#10b981" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#10b981" stopOpacity="0.2" />
+            </linearGradient>
+            
+            <linearGradient id="gradient-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.2" />
+              <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.8" />
+              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.2" />
+            </linearGradient>
+          </defs>
+
+          {/* Connection lines */}
+          {connections.map((conn, index) => {
+            const isActive = activeConnection === index;
+            const x1 = conn.from.x;
+            const y1 = conn.from.y;
+            const x2 = conn.to.x;
+            const y2 = conn.to.y;
+            
+            // Calculate control point for curved path
+            const cx = (x1 + x2) / 2;
+            const cy = (y1 + y2) / 2 - 30;
+            
+            return (
+              <g key={index}>
+                {/* Main path */}
+                <path
+                  d={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
+                  stroke={conn.color}
+                  strokeWidth={isActive ? "3" : "2"}
+                  fill="none"
+                  opacity={isActive ? "1" : "0.4"}
+                  strokeDasharray={isActive ? "10 5" : "none"}
+                  markerEnd="url(#arrowhead)"
+                >
+                  {isActive && (
+                    <animate
+                      attributeName="stroke-dashoffset"
+                      from="0"
+                      to="-15"
+                      dur="0.5s"
+                      repeatCount="indefinite"
+                    />
+                  )}
+                </path>
                 
-                {/* Activity indicator */}
+                {/* Animated dot on active connection */}
                 {isActive && (
-                  <div className="mt-2 flex gap-1">
-                    <span className={`inline-block w-1 h-1 rounded-full bg-${agent.color}-400 animate-bounce`} style={{ animationDelay: '0ms' }} />
-                    <span className={`inline-block w-1 h-1 rounded-full bg-${agent.color}-400 animate-bounce`} style={{ animationDelay: '100ms' }} />
-                    <span className={`inline-block w-1 h-1 rounded-full bg-${agent.color}-400 animate-bounce`} style={{ animationDelay: '200ms' }} />
-                  </div>
+                  <circle r="6" fill={conn.color}>
+                    <animateMotion
+                      dur="2s"
+                      repeatCount="indefinite"
+                      path={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
+                    />
+                  </circle>
                 )}
+              </g>
+            );
+          })}
+        </svg>
+
+        {/* Agent Nodes */}
+        {agents.map((agent, index) => {
+          const Icon = agent.icon;
+          const isActive = activeAgent === index;
+          const isMain = agent.main;
+          
+          return (
+            <div
+              key={agent.id}
+              className="absolute"
+              style={{ 
+                left: `${agent.x}px`, 
+                top: `${agent.y}px`,
+                transform: 'translate(-50%, -50%)',
+                zIndex: isMain ? 20 : 10
+              }}
+            >
+              {/* Glow effect for active agent */}
+              {isActive && (
+                <div 
+                  className="absolute inset-0 rounded-2xl animate-pulse"
+                  style={{
+                    background: `radial-gradient(circle, ${isMain ? '#8b5cf6' : '#6366f1'}40, transparent)`,
+                    filter: 'blur(20px)',
+                    transform: 'scale(2)'
+                  }}
+                />
+              )}
+              
+              {/* Agent card */}
+              <div className={`
+                relative rounded-2xl p-4 shadow-lg transition-all duration-300
+                ${isMain 
+                  ? 'bg-gradient-to-br from-purple-500 to-purple-600 text-white scale-110' 
+                  : 'bg-white hover:shadow-xl'
+                }
+                ${isActive && !isMain ? 'ring-2 ring-indigo-400 shadow-xl scale-105' : ''}
+                ${!isActive && !isMain ? 'hover:scale-105' : ''}
+              `}>
+                
+                {/* Status indicator */}
+                <div className={`
+                  absolute -top-1 -right-1 w-3 h-3 rounded-full
+                  ${isActive ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}
+                `} />
+                
+                {/* Icon and label */}
+                <div className="flex flex-col items-center gap-2">
+                  <Icon className={`h-6 w-6 ${isMain ? 'text-white' : 'text-indigo-600'}`} />
+                  <p className={`text-xs font-medium ${isMain ? 'text-white' : 'text-gray-700'}`}>
+                    {agent.label}
+                  </p>
+                  
+                  {/* Activity dots for active agent */}
+                  {isActive && (
+                    <div className="flex gap-1 mt-1">
+                      <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
+          );
+        })}
+
+        {/* Activity indicator */}
+        <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-xl p-3 shadow-lg" style={{ zIndex: 30 }}>
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+            <span className="text-xs font-semibold text-gray-700">Active Flow</span>
           </div>
-        );
-      })}
-
-      {/* Central status */}
-      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-        <div className="relative">
-          <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-indigo-400 to-blue-400 opacity-20 animate-pulse" />
+          <div className="text-xs text-gray-600">
+            {activeAgent === 0 && 'Gathering research data...'}
+            {activeAgent === 1 && 'Analyzing patterns...'}
+            {activeAgent === 2 && 'Orchestrating agents...'}
+            {activeAgent === 3 && 'Synthesizing results...'}
+            {activeAgent === 4 && 'Storing insights...'}
+          </div>
         </div>
-      </div>
 
-      {/* Activity feed */}
-      <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur rounded-lg p-3 shadow-lg">
-        <div className="flex items-center gap-2 mb-2">
-          <Activity className="h-4 w-4 text-green-500" />
-          <span className="text-xs font-semibold text-slate-700">Live Activity</span>
-        </div>
-        <div className="space-y-1">
-          {['Processing query...', 'Analyzing data...', 'Synthesizing results...'].map((status, i) => (
-            <div key={i} className={`text-xs text-slate-600 ${i === activeAgent % 3 ? 'opacity-100' : 'opacity-40'} transition-opacity`}>
-              {status}
+        {/* Performance metrics */}
+        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur rounded-xl p-3 shadow-lg" style={{ zIndex: 30 }}>
+          <div className="grid grid-cols-2 gap-4 text-xs">
+            <div>
+              <p className="text-gray-500">Throughput</p>
+              <p className="font-bold text-gray-900">1.2K/s</p>
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Metrics */}
-      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur rounded-lg p-3 shadow-lg">
-        <div className="grid grid-cols-2 gap-3 text-xs">
-          <div>
-            <p className="text-slate-500">Throughput</p>
-            <p className="font-semibold text-slate-700">1.2K/s</p>
-          </div>
-          <div>
-            <p className="text-slate-500">Latency</p>
-            <p className="font-semibold text-green-600">42ms</p>
+            <div>
+              <p className="text-gray-500">Latency</p>
+              <p className="font-bold text-green-600">42ms</p>
+            </div>
           </div>
         </div>
       </div>
@@ -947,6 +998,18 @@ export default function GradientLogic() {
         @keyframes scaleIn {
           from { opacity: 0; transform: scale(0.8); }
           to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes flowAnimation {
+          from { stroke-dashoffset: 0; }
+          to { stroke-dashoffset: -15; }
+        }
+        @-webkit-keyframes flowAnimation {
+          from { stroke-dashoffset: 0; }
+          to { stroke-dashoffset: -15; }
+        }
+        @-moz-keyframes flowAnimation {
+          from { stroke-dashoffset: 0; }
+          to { stroke-dashoffset: -15; }
         }
       `}</style>
     </div>
