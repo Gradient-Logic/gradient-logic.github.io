@@ -494,6 +494,50 @@ export default function GradientLogic() {
         </div>
       </section>
 
+      {/* INDUSTRIES WE SERVE */}
+      <section id="industries" className="py-20 px-4 bg-slate-50">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
+            <p className="text-lg text-slate-600">Proven patterns across regulated and performance-critical domains</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
+              <div className="inline-flex p-3 rounded-xl bg-indigo-50 text-indigo-600 mb-4">
+                <Shield className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold mb-2">Government</h3>
+              <p className="text-sm text-slate-600">Secure, auditable agent workflows and policy-driven governance.</p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
+              <div className="inline-flex p-3 rounded-xl bg-blue-50 text-blue-600 mb-4">
+                <Network className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold mb-2">Telecommunications</h3>
+              <p className="text-sm text-slate-600">Network operations, customer automation, and real-time agent routing.</p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
+              <div className="inline-flex p-3 rounded-xl bg-purple-50 text-purple-600 mb-4">
+                <Cpu className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold mb-2">IT / Software</h3>
+              <p className="text-sm text-slate-600">DevOps copilots, RAG platforms, and multi-agent delivery pipelines.</p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
+              <div className="inline-flex p-3 rounded-xl bg-emerald-50 text-emerald-600 mb-4">
+                <TrendingUp className="h-6 w-6" />
+              </div>
+              <h3 className="font-semibold mb-2">Asset Management</h3>
+              <p className="text-sm text-slate-600">Research automation, risk signals, and compliance-aware agents.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* GARTNER INSIGHTS SECTION */}
       <section className="py-20 px-4 bg-gradient-to-r from-slate-50 to-indigo-50 relative">
         <div className="mx-auto max-w-7xl">
@@ -819,7 +863,7 @@ export default function GradientLogic() {
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">What We&apos;re Building</h2>
-            <p className="text-lg text-slate-600">Current projects showcasing our multi-agent orchestration expertise</p>
+            <p className="text-lg text-slate-600">Current projects across Government, Telecommunications, IT, and Asset Management</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -827,7 +871,7 @@ export default function GradientLogic() {
               {
                 title: "Autonomous Research Platform",
                 description: "Multi-agent system that conducts comprehensive research, analysis, and synthesis across domains",
-                tech: ["MCP Protocol", "LangGraph", "GPT-4", "Claude", "Vector DB"],
+                tech: ["MCP Protocol", "LangGraph", "GPT-4", "Claude", "ChromaDB"],
                 status: "In Production",
                 metrics: { agents: 5, requests: "10K/day", latency: "200ms" }
               },
@@ -919,16 +963,16 @@ export default function GradientLogic() {
               </p>
               <div className="flex gap-6">
                 <div>
-                  <div className="text-3xl font-bold text-indigo-600">50+</div>
+                  <div className="text-3xl font-bold text-indigo-600">10+</div>
                   <div className="text-sm text-slate-600">Projects Deployed</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-blue-600">15+</div>
+                  <div className="text-3xl font-bold text-blue-600">3</div>
                   <div className="text-sm text-slate-600">Enterprise Clients</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-bold text-purple-600">24/7</div>
-                  <div className="text-sm text-slate-600">Agent Uptime</div>
+                  <div className="text-3xl font-bold text-purple-600">SLA-based</div>
+                  <div className="text-sm text-slate-600">Availability</div>
                 </div>
               </div>
             </div>
