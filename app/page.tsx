@@ -4,6 +4,13 @@ import { ArrowRight, MessageSquare, Brain, Shield, Mail, Search, Lightbulb, Wren
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+// Google Analytics types
+declare global {
+  interface Window {
+    gtag: (command: string, action: string, parameters?: Record<string, unknown>) => void;
+  }
+}
+
 // Animated Background Component
 const AnimatedBackground = () => {
   const [mounted, setMounted] = useState(false);
@@ -997,13 +1004,35 @@ export default function GradientLogic() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
               <Button asChild size="lg" className="rounded-full bg-white text-slate-900 hover:bg-slate-100">
-                <a href="mailto:hello@gradient-logic.com">
+                <a 
+                  href="mailto:hello@gradient-logic.com"
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && window.gtag) {
+                      window.gtag('event', 'contact_email_click', {
+                        event_category: 'Contact',
+                        event_label: 'Email Button'
+                      });
+                    }
+                  }}
+                >
                   <Mail className="h-5 w-5 mr-2" />
                   Email Us
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-full border-white text-white hover:bg-white/10">
-                <a href="https://discord.gg/sFAWANRvV3" target="_blank" rel="noopener noreferrer">
+                <a 
+                  href="https://discord.gg/sFAWANRvV3" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && window.gtag) {
+                      window.gtag('event', 'contact_discord_click', {
+                        event_category: 'Contact',
+                        event_label: 'Discord Button'
+                      });
+                    }
+                  }}
+                >
                   <MessageSquare className="h-5 w-5 mr-2" />
                   Join our Discord
                 </a>
