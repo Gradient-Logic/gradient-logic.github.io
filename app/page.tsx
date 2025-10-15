@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from "react";
-import { ArrowRight, MessageSquare, Mail, FileText, Clock, CheckCircle2, Zap, Shield, Bot, Cpu, Target, Calendar, Play, Sparkles, ChevronRight, AlertTriangle, ThumbsUp } from "lucide-react";
+import { ArrowRight, MessageSquare, FileText, Clock, CheckCircle2, Zap, Shield, Bot, Cpu, Target, Calendar, Play, Sparkles, ChevronRight, AlertTriangle, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -960,9 +960,9 @@ export default function GradientLogic() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600">
-                <a href="mailto:hello@gradient-logic.com">
-                  <Mail className="h-5 w-5 mr-2" />
-                  hello@gradient-logic.com
+                <a href="https://calendly.com/gradient-logic/discovery-call" target="_blank" rel="noopener noreferrer">
+                  <Calendar className="h-5 w-5 mr-2" />
+                  Book a Call
                 </a>
               </Button>
               <Button asChild size="lg" variant="outline" className="rounded-full">
