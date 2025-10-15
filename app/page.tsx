@@ -1,433 +1,276 @@
 'use client'
-import React, { useState, useEffect } from "react";
-import { ArrowRight, MessageSquare, Brain, Shield, Mail, Search, Lightbulb, Wrench, Rocket, Network, Bot, Workflow, Cpu, Database, Zap, Activity, CheckCircle2, TrendingUp, FileCode2, Timer, Award, BarChart } from "lucide-react";
+import React, { useState } from "react";
+import { ArrowRight, MessageSquare, Mail, FileText, Clock, CheckCircle2, Zap, Shield, Bot, Cpu, Target, Calendar, Play, Sparkles, ChevronRight, AlertTriangle, ThumbsUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-// Google Analytics types
-declare global {
-  interface Window {
-    gtag: (command: string, action: string, parameters?: Record<string, unknown>) => void;
-  }
+// Report type definition
+interface ResearchReport {
+  company: string;
+  ticker: string;
+  price: string;
+  rating: string;
+  targetPrice: string;
+  sentiment: string;
+  keyInsights: string[];
+  risks: string[];
+  summary: string;
 }
 
-// Animated Background Component
-const AnimatedBackground = () => {
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+// Interactive Ticker Demo Component
+const InteractiveTickerDemo = () => {
+  const [ticker, setTicker] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [report, setReport] = useState<ResearchReport | null>(null);
 
-  if (!mounted) return null;
+  const sampleReports: Record<string, ResearchReport> = {
+    'AAPL': {
+      company: 'Apple Inc.',
+      ticker: 'AAPL',
+      price: '$185.42',
+      rating: 'BUY',
+      targetPrice: '$210',
+      sentiment: 'Positive',
+      keyInsights: [
+        'Services revenue grew 16% YoY, demonstrating strong ecosystem stickiness',
+        'iPhone 15 launch exceeded expectations with Pro models sold out in key markets',
+        'Margins expanding due to shift toward higher-margin services (23% of revenue)',
+        'Vision Pro positioned for Q1 2024 launch with strong enterprise interest'
+      ],
+      risks: [
+        'Regulatory scrutiny in EU regarding App Store policies',
+        'China revenue exposure (19% of total) amid geopolitical tensions'
+      ],
+      summary: 'Strong fundamental momentum with expanding margins. Services growth offsets hardware cyclicality. Recommended position size: 3-5% of portfolio.'
+    },
+    'MSFT': {
+      company: 'Microsoft Corporation',
+      ticker: 'MSFT',
+      price: '$378.91',
+      rating: 'STRONG BUY',
+      targetPrice: '$425',
+      sentiment: 'Very Positive',
+      keyInsights: [
+        'Azure growth accelerating at 29% YoY driven by AI workloads',
+        'GitHub Copilot and M365 Copilot showing strong enterprise adoption',
+        'Commercial bookings up 23%, indicating strong forward revenue visibility',
+        'OpenAI partnership creating competitive moat in enterprise AI'
+      ],
+      risks: [
+        'High valuation at 32x forward earnings vs 5-year average of 28x',
+        'Gaming division facing regulatory challenges with Activision deal'
+      ],
+      summary: 'Best-in-class AI positioning among mega-caps. Cloud and AI synergies driving margin expansion. Core holding recommended.'
+    },
+    'TSLA': {
+      company: 'Tesla Inc.',
+      ticker: 'TSLA',
+      price: '$242.68',
+      rating: 'HOLD',
+      targetPrice: '$250',
+      sentiment: 'Mixed',
+      keyInsights: [
+        'Q3 deliveries beat estimates with 435K vehicles (up 27% YoY)',
+        'Cybertruck production ramping, 1.9M reservations reported',
+        'Energy storage deployments up 90% YoY, now $6B annual run-rate',
+        'FSD v12 showing improved capabilities, subscription revenue growing'
+      ],
+      risks: [
+        'Margin compression from aggressive pricing (automotive gross margin at 16.3%)',
+        'Competition intensifying in China and Europe',
+        'Execution risk on multiple new products (Cybertruck, Semi, Roadster)'
+      ],
+      summary: 'Growth story intact but valuation stretched. Wait for better entry point or take profits if held since 2023. Not a new position at current levels.'
+    }
+  };
 
-  return (
-    <div className="absolute inset-0 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-blue-50" />
-      {/* Animated Grid */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.03]">
-        <defs>
-          <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" />
-      </svg>
-      {/* Simple animated orbs without framer-motion */}
-      <div className="absolute top-20 left-20 w-72 h-72 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-20 w-96 h-96 bg-gradient-to-br from-blue-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse" />
-    </div>
-  );
-};
-
-// Live Monitoring Dashboard Component
-const LiveMonitoringDashboard = () => {
-  const [metrics, setMetrics] = useState({
-    agents: 12,
-    requests: 1247,
-    success: 99.2,
-    latency: 42
-  });
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setMetrics(prev => ({
-        agents: prev.agents + Math.floor(Math.random() * 3 - 1),
-        requests: prev.requests + Math.floor(Math.random() * 10),
-        success: Math.min(100, Math.max(95, prev.success + (Math.random() - 0.5))),
-        latency: Math.max(20, Math.min(60, prev.latency + Math.floor(Math.random() * 10 - 5)))
-      }));
-    }, 2000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-2xl border border-slate-800">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold flex items-center gap-2">
-          <Activity className="h-5 w-5 text-green-400" />
-          Live Agent Monitoring
-        </h3>
-        <span className="text-xs bg-green-400/20 text-green-400 px-2 py-1 rounded-full">ACTIVE</span>
-      </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="bg-slate-800/50 rounded-lg p-3">
-          <p className="text-xs text-slate-400">Active Agents</p>
-          <p className="text-2xl font-bold text-indigo-400">{metrics.agents}</p>
-        </div>
-        <div className="bg-slate-800/50 rounded-lg p-3">
-          <p className="text-xs text-slate-400">Requests/min</p>
-          <p className="text-2xl font-bold text-blue-400">{metrics.requests}</p>
-        </div>
-        <div className="bg-slate-800/50 rounded-lg p-3">
-          <p className="text-xs text-slate-400">Success Rate</p>
-          <p className="text-2xl font-bold text-green-400">{metrics.success.toFixed(1)}%</p>
-        </div>
-        <div className="bg-slate-800/50 rounded-lg p-3">
-          <p className="text-xs text-slate-400">Avg Latency</p>
-          <p className="text-2xl font-bold text-yellow-400">{metrics.latency}ms</p>
-        </div>
-      </div>
-      <div className="mt-4 space-y-2">
-        <div className="flex items-center gap-2 text-xs">
-          <CheckCircle2 className="h-3 w-3 text-green-400" />
-          <span className="text-slate-400">All systems operational</span>
-        </div>
-        <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-          <div className="h-full bg-gradient-to-r from-green-400 to-blue-400 animate-pulse" />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Animated Code Terminal Component
-const CodeTerminal = () => {
-  const [lines, setLines] = useState<string[]>([]);
-  const [mounted, setMounted] = useState(false);
-  
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
+  const handleGenerate = () => {
+    const upperTicker = ticker.toUpperCase();
+    if (!upperTicker) return;
     
-    const codeLines = [
-      "$ mcp init multi-agent-system",
-      "✓ Initializing MCP server...",
-      "✓ Loading agent configurations...",
-      "✓ Establishing secure connections...",
-      "",
-      "$ mcp deploy --agents 3 --orchestrator langraph",
-      "→ Agent[research]: Ready",
-      "→ Agent[analysis]: Ready", 
-      "→ Agent[synthesis]: Ready",
-      "✓ Multi-agent system deployed",
-      "",
-      "$ mcp monitor --real-time",
-      "[INFO] Orchestrator active",
-      "[INFO] Processing request #1247",
-      "[SUCCESS] Task completed in 42ms"
-    ];
+    setIsGenerating(true);
+    setReport(null);
     
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < codeLines.length) {
-        const line = codeLines[index];
-        if (line !== undefined) {
-          setLines(prev => [...prev, line]);
-        }
-        index++;
+    // Simulate AI processing
+    setTimeout(() => {
+      if (sampleReports[upperTicker]) {
+        setReport(sampleReports[upperTicker]);
       } else {
-        setLines([]);
-        index = 0;
+        // Generic report for any other ticker
+        setReport({
+          company: `${upperTicker} - Sample Company`,
+          ticker: upperTicker,
+          price: '$' + (Math.random() * 500 + 50).toFixed(2),
+          rating: ['BUY', 'HOLD', 'SELL'][Math.floor(Math.random() * 3)],
+          targetPrice: '$' + (Math.random() * 600 + 100).toFixed(2),
+          sentiment: 'Neutral',
+          keyInsights: [
+            'Financial metrics show stable growth trajectory',
+            'Recent product launches gaining market traction',
+            'Management executing on strategic initiatives',
+            'Industry tailwinds supporting revenue growth'
+          ],
+          risks: [
+            'Market volatility could impact near-term performance',
+            'Competitive landscape intensifying'
+          ],
+          summary: 'Sample analysis for demonstration purposes. Real reports include deep fundamental analysis, 10+ data sources, and custom insights based on your investment criteria.'
+        });
       }
-    }, 300);
-    return () => clearInterval(interval);
-  }, [mounted]);
-
-  if (!mounted) return null;
+      setIsGenerating(false);
+    }, 2500);
+  };
 
   return (
-    <div className="bg-slate-900 rounded-2xl p-6 font-mono text-sm shadow-2xl border border-slate-800 h-[400px] overflow-hidden">
-      <div className="flex items-center gap-2 mb-4">
-        <div className="flex gap-2">
-          <div className="w-3 h-3 rounded-full bg-red-500" />
-          <div className="w-3 h-3 rounded-full bg-yellow-500" />
-          <div className="w-3 h-3 rounded-full bg-green-500" />
-        </div>
-        <span className="text-slate-500 text-xs">terminal</span>
+    <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+      <div className="bg-gradient-to-r from-indigo-600 to-blue-600 p-6 text-white">
+        <h3 className="text-xl font-bold mb-2 flex items-center gap-2">
+          <Sparkles className="h-5 w-5" />
+          Interactive Demo: AI Research Agent
+        </h3>
+        <p className="text-sm text-indigo-100">Enter any stock ticker to see an instant research report</p>
       </div>
-      <div className="space-y-1 h-[320px] overflow-y-auto">
-        {lines && lines.length > 0 && lines.map((line, i) => {
-          if (!line || typeof line !== 'string') return null;
-          return (
-            <div
-              key={i}
-              className={`${
-                line.startsWith('$') ? 'text-green-400' :
-                line.startsWith('✓') ? 'text-blue-400' :
-                line.startsWith('→') ? 'text-purple-400' :
-                line.startsWith('[INFO]') ? 'text-cyan-400' :
-                line.startsWith('[SUCCESS]') ? 'text-green-400' :
-                'text-slate-400'
-              } transition-opacity duration-200`}
-            >
-              {line}
+
+      <div className="p-6">
+        <div className="flex gap-3 mb-6">
+          <input
+            type="text"
+            placeholder="Enter ticker (e.g., AAPL, MSFT, TSLA)"
+            value={ticker}
+            onChange={(e) => setTicker(e.target.value.toUpperCase())}
+            onKeyPress={(e) => e.key === 'Enter' && handleGenerate()}
+            className="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none text-lg font-mono"
+          />
+          <Button 
+            onClick={handleGenerate} 
+            disabled={isGenerating || !ticker}
+            className="bg-gradient-to-r from-indigo-600 to-blue-600 hover:shadow-lg px-8"
+          >
+            {isGenerating ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                Analyzing...
+              </>
+            ) : (
+              <>
+                <Play className="h-4 w-4 mr-2" />
+                Generate Report
+              </>
+            )}
+          </Button>
+        </div>
+
+        {isGenerating && (
+          <div className="space-y-3 mb-6">
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <div className="animate-pulse w-2 h-2 bg-blue-500 rounded-full" />
+              Gathering financial data from 12 sources...
             </div>
-          );
-        })}
-        <span className="inline-block w-2 h-4 bg-green-400 animate-pulse" />
-      </div>
-    </div>
-  );
-};
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <div className="animate-pulse w-2 h-2 bg-indigo-500 rounded-full" />
+              Analyzing news sentiment (847 articles)...
+            </div>
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <div className="animate-pulse w-2 h-2 bg-purple-500 rounded-full" />
+              Generating investment thesis...
+            </div>
+          </div>
+        )}
 
-// Agent Flow Visualization
-const AgentFlowVisualization = () => {
-  const [activeAgent, setActiveAgent] = useState(0);
-  const [activeConnection, setActiveConnection] = useState(0);
-  
-  useEffect(() => {
-    // Rotate active agent
-    const agentInterval = setInterval(() => {
-      setActiveAgent(prev => (prev + 1) % 5);
-    }, 2000);
-    
-    // Rotate active connection
-    const connectionInterval = setInterval(() => {
-      setActiveConnection(prev => (prev + 1) % 4);
-    }, 500);
-    
-    return () => {
-      clearInterval(agentInterval);
-      clearInterval(connectionInterval);
-    };
-  }, []);
-
-  const agents = [
-    { id: 'research', x: 100, y: 100, icon: Bot, color: 'indigo', label: 'Research' },
-    { id: 'analysis', x: 500, y: 100, icon: Brain, color: 'blue', label: 'Analysis' },
-    { id: 'orchestrator', x: 300, y: 250, icon: Cpu, color: 'purple', label: 'Orchestrator', main: true },
-    { id: 'synthesis', x: 100, y: 400, icon: FileCode2, color: 'emerald', label: 'Synthesis' },
-    { id: 'storage', x: 500, y: 400, icon: Database, color: 'cyan', label: 'Storage' }
-  ];
-
-  const connections = [
-    { from: agents[0], to: agents[2], color: '#6366f1' }, // Research to Orchestrator
-    { from: agents[1], to: agents[2], color: '#3b82f6' }, // Analysis to Orchestrator
-    { from: agents[3], to: agents[2], color: '#10b981' }, // Synthesis to Orchestrator
-    { from: agents[4], to: agents[2], color: '#06b6d4' }  // Storage to Orchestrator
-  ];
-
-  return (
-    <div className="relative w-full mx-auto" style={{ maxWidth: '600px', height: '500px' }}>
-      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-indigo-50 rounded-3xl overflow-hidden shadow-xl">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 2px 2px, #6366f1 1px, transparent 1px)`,
-            backgroundSize: '32px 32px'
-          }} />
-        </div>
-
-        {/* SVG for connections */}
-        <svg 
-          className="absolute inset-0 w-full h-full" 
-          viewBox="0 0 600 500" 
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ zIndex: 1 }}
-        >
-          <defs>
-            {/* Arrow marker */}
-            <marker
-              id="arrowhead"
-              markerWidth="10"
-              markerHeight="7"
-              refX="9"
-              refY="3.5"
-              orient="auto"
-            >
-              <polygon
-                points="0 0, 10 3.5, 0 7"
-                fill="#6366f1"
-                opacity="0.6"
-              />
-            </marker>
-            
-            {/* Gradient definitions */}
-            <linearGradient id="gradient-indigo" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#6366f1" stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#6366f1" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#6366f1" stopOpacity="0.2" />
-            </linearGradient>
-            
-            <linearGradient id="gradient-blue" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.2" />
-            </linearGradient>
-            
-            <linearGradient id="gradient-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#10b981" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#10b981" stopOpacity="0.2" />
-            </linearGradient>
-            
-            <linearGradient id="gradient-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.2" />
-            </linearGradient>
-          </defs>
-
-          {/* Connection lines */}
-          {connections.map((conn, index) => {
-            const isActive = activeConnection === index;
-            const x1 = conn.from.x;
-            const y1 = conn.from.y;
-            const x2 = conn.to.x;
-            const y2 = conn.to.y;
-            
-            // Calculate control point for curved path
-            const cx = (x1 + x2) / 2;
-            const cy = (y1 + y2) / 2 - 30;
-            
-            return (
-              <g key={index}>
-                {/* Main path */}
-                <path
-                  d={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
-                  stroke={conn.color}
-                  strokeWidth={isActive ? "3" : "2"}
-                  fill="none"
-                  opacity={isActive ? "1" : "0.4"}
-                  strokeDasharray={isActive ? "10 5" : "none"}
-                  markerEnd="url(#arrowhead)"
-                >
-                  {isActive && (
-                    <animate
-                      attributeName="stroke-dashoffset"
-                      from="0"
-                      to="-15"
-                      dur="0.5s"
-                      repeatCount="indefinite"
-                    />
-                  )}
-                </path>
-                
-                {/* Animated dot on active connection */}
-                {isActive && (
-                  <circle r="6" fill={conn.color}>
-                    <animateMotion
-                      dur="2s"
-                      repeatCount="indefinite"
-                      path={`M ${x1} ${y1} Q ${cx} ${cy} ${x2} ${y2}`}
-                    />
-                  </circle>
-                )}
-              </g>
-            );
-          })}
-        </svg>
-
-        {/* Agent Nodes */}
-        {agents.map((agent, index) => {
-          const Icon = agent.icon;
-          const isActive = activeAgent === index;
-          const isMain = agent.main;
-          
-          return (
-            <div
-              key={agent.id}
-              className="absolute"
-              style={{ 
-                left: `${agent.x}px`, 
-                top: `${agent.y}px`,
-                transform: 'translate(-50%, -50%)',
-                zIndex: isMain ? 20 : 10
-              }}
-            >
-              {/* Glow effect for active agent */}
-              {isActive && (
-                <div 
-                  className="absolute inset-0 rounded-2xl animate-pulse"
-                  style={{
-                    background: `radial-gradient(circle, ${isMain ? '#8b5cf6' : '#6366f1'}40, transparent)`,
-                    filter: 'blur(20px)',
-                    transform: 'scale(2)'
-                  }}
-                />
-              )}
-              
-              {/* Agent card */}
-              <div className={`
-                relative rounded-2xl p-4 shadow-lg transition-all duration-300
-                ${isMain 
-                  ? 'bg-gradient-to-br from-purple-500 to-purple-600 text-white scale-110' 
-                  : 'bg-white hover:shadow-xl'
-                }
-                ${isActive && !isMain ? 'ring-2 ring-indigo-400 shadow-xl scale-105' : ''}
-                ${!isActive && !isMain ? 'hover:scale-105' : ''}
-              `}>
-                
-                {/* Status indicator */}
-                <div className={`
-                  absolute -top-1 -right-1 w-3 h-3 rounded-full
-                  ${isActive ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}
-                `} />
-                
-                {/* Icon and label */}
-                <div className="flex flex-col items-center gap-2">
-                  <Icon className={`h-6 w-6 ${isMain ? 'text-white' : 'text-indigo-600'}`} />
-                  <p className={`text-xs font-medium ${isMain ? 'text-white' : 'text-gray-700'}`}>
-                    {agent.label}
-                  </p>
-                  
-                  {/* Activity dots for active agent */}
-                  {isActive && (
-                    <div className="flex gap-1 mt-1">
-                      <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                      <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                      <span className="w-1 h-1 bg-current rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                    </div>
-                  )}
+        {report && (
+          <div className="space-y-4 animate-[fadeInUp_0.5s_forwards]">
+            {/* Header */}
+            <div className="border-b border-slate-200 pb-4">
+              <div className="flex items-start justify-between mb-2">
+                <div>
+                  <h4 className="text-2xl font-bold text-slate-900">{report.company}</h4>
+                  <p className="text-slate-600">{report.ticker} • Generated {new Date().toLocaleDateString()}</p>
+                </div>
+                <div className="text-right">
+                  <div className="text-2xl font-bold text-slate-900">{report.price}</div>
+                  <div className={`text-sm font-semibold px-3 py-1 rounded-full ${
+                    report.rating === 'BUY' || report.rating === 'STRONG BUY' ? 'bg-green-100 text-green-700' :
+                    report.rating === 'HOLD' ? 'bg-yellow-100 text-yellow-700' :
+                    'bg-red-100 text-red-700'
+                  }`}>
+                    {report.rating}
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4 mt-3">
+                <div className="bg-slate-50 rounded-lg p-3">
+                  <p className="text-xs text-slate-500">Target Price</p>
+                  <p className="font-semibold text-slate-900">{report.targetPrice}</p>
+                </div>
+                <div className="bg-slate-50 rounded-lg p-3">
+                  <p className="text-xs text-slate-500">Sentiment</p>
+                  <p className="font-semibold text-slate-900">{report.sentiment}</p>
+                </div>
+                <div className="bg-slate-50 rounded-lg p-3">
+                  <p className="text-xs text-slate-500">Confidence</p>
+                  <p className="font-semibold text-slate-900">High</p>
                 </div>
               </div>
             </div>
-          );
-        })}
 
-        {/* Activity indicator */}
-        <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur rounded-xl p-3 shadow-lg" style={{ zIndex: 30 }}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            <span className="text-xs font-semibold text-gray-700">Active Flow</span>
-          </div>
-          <div className="text-xs text-gray-600">
-            {activeAgent === 0 && 'Gathering research data...'}
-            {activeAgent === 1 && 'Analyzing patterns...'}
-            {activeAgent === 2 && 'Orchestrating agents...'}
-            {activeAgent === 3 && 'Synthesizing results...'}
-            {activeAgent === 4 && 'Storing insights...'}
-          </div>
-        </div>
+            {/* Key Insights */}
+            <div>
+              <h5 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <ThumbsUp className="h-4 w-4 text-green-600" />
+                Key Insights
+              </h5>
+              <ul className="space-y-2">
+                {report.keyInsights.map((insight: string, i: number) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                    <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    {insight}
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-        {/* Performance metrics */}
-        <div className="absolute top-4 right-4 bg-white/95 backdrop-blur rounded-xl p-3 shadow-lg" style={{ zIndex: 30 }}>
-          <div className="grid grid-cols-2 gap-4 text-xs">
+            {/* Risks */}
             <div>
-              <p className="text-gray-500">Throughput</p>
-              <p className="font-bold text-gray-900">1.2K/s</p>
+              <h5 className="font-semibold text-slate-900 mb-3 flex items-center gap-2">
+                <AlertTriangle className="h-4 w-4 text-amber-600" />
+                Key Risks
+              </h5>
+              <ul className="space-y-2">
+                {report.risks.map((risk: string, i: number) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+                    <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 flex-shrink-0" />
+                    {risk}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div>
-              <p className="text-gray-500">Latency</p>
-              <p className="font-bold text-green-600">42ms</p>
+
+            {/* Summary */}
+            <div className="bg-indigo-50 rounded-lg p-4">
+              <h5 className="font-semibold text-slate-900 mb-2">Investment Summary</h5>
+              <p className="text-sm text-slate-700">{report.summary}</p>
+            </div>
+
+            {/* CTA */}
+            <div className="bg-gradient-to-r from-slate-50 to-indigo-50 rounded-lg p-4 text-center">
+              <p className="text-sm text-slate-600 mb-3">
+                This is a simplified demo. Real reports include 10+ data sources, 
+                valuation models, peer comparisons, and custom insights.
+              </p>
+              <Button className="bg-gradient-to-r from-indigo-600 to-blue-600">
+                <a href="#contact">Get Full Report Access</a>
+              </Button>
             </div>
           </div>
-        </div>
+        )}
+
+        {!report && !isGenerating && (
+          <div className="text-center py-12 text-slate-400">
+            <Bot className="h-12 w-12 mx-auto mb-3 opacity-50" />
+            <p>Enter a ticker symbol above to see instant AI-generated research</p>
+            <p className="text-xs mt-2">Try: AAPL, MSFT, or TSLA for detailed examples</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -435,656 +278,714 @@ const AgentFlowVisualization = () => {
 
 export default function GradientLogic() {
   return (
-    <div className="min-h-screen bg-white text-slate-900 relative">
-      <AnimatedBackground />
-      
+    <div className="min-h-screen bg-white text-slate-900">
       {/* NAVBAR */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-white/70 border-b border-slate-200/50">
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-white/90 border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
           <a href="#home" className="flex items-center gap-3">
-            <img src="/gl-logo.png" alt="GradientLogic" className="h-8 w-8" />
+            <img src="/gl-logo.png" alt="Gradient Logic" className="h-8 w-8" />
             <span className="font-semibold text-xl tracking-tight">Gradient <span className="text-indigo-600">Logic</span></span>
           </a>
           <nav className="hidden md:flex items-center gap-6 text-sm">
+            <a href="#demo" className="hover:text-indigo-700 transition-colors">Live Demo</a>
             <a href="#services" className="hover:text-indigo-700 transition-colors">Services</a>
-            <a href="#work" className="hover:text-indigo-700 transition-colors">Work</a>
-            <a href="#approach" className="hover:text-indigo-700 transition-colors">Approach</a>
-            <a href="#about" className="hover:text-indigo-700 transition-colors">About</a>
+            <a href="#pricing" className="hover:text-indigo-700 transition-colors">Pricing</a>
+            <a href="#results" className="hover:text-indigo-700 transition-colors">Results</a>
             <a href="#contact" className="hover:text-indigo-700 transition-colors">Contact</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button asChild className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:shadow-lg transition-all">
-              <a href="#contact"><MessageSquare className="h-4 w-4 mr-2"/>Let&apos;s talk</a>
+            <Button asChild className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600">
+              <a href="#contact">Book Demo Call</a>
             </Button>
           </div>
         </div>
       </header>
 
-      {/* HERO with Animated Elements */}
-      <section id="home" className="relative py-24 px-4 overflow-hidden">
-        <div className="mx-auto max-w-7xl relative z-10">
-          <div className="text-center mb-12 opacity-0 animate-[fadeIn_0.6s_forwards]">
-            <div className="inline-block mb-4 px-4 py-2 bg-gradient-to-r from-indigo-100 to-blue-100 rounded-full hover:scale-105 transition-transform">
-              <span className="text-sm font-medium bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                Multi-Agent Orchestration Experts
-              </span>
+      {/* HERO */}
+      <section id="home" className="relative py-20 px-4 bg-gradient-to-br from-slate-50 via-white to-indigo-50">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-12">
+            <div className="inline-block mb-4 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium">
+              For Asset Managers & Investment Professionals
             </div>
             <h1 className="text-5xl md:text-7xl font-bold mb-6">
-              <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">Build </span>
-              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Autonomous AI</span>
-              <br />
-              <span className="bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">That Ships</span>
+              <span className="text-slate-900">Stop Spending</span><br />
+              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">40 Hours Per Week</span><br />
+              <span className="text-slate-900">on Company Research</span>
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
-              We architect and deploy production-ready multi-agent systems with MCP, 
-              turning complex AI orchestration into reliable business outcomes.
+              AI agents that automatically research companies, monitor portfolios, and generate investment memos—
+              <strong> with full audit trails for compliance</strong>.
             </p>
-            <div className="flex gap-4 justify-center">
-              <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:shadow-xl transition-all">
-                <a href="#contact">Start Building <ArrowRight className="ml-2 h-4 w-4" /></a>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:shadow-xl">
+                <a href="#demo">Try Live Demo <ArrowRight className="ml-2 h-4 w-4" /></a>
               </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-full hover:shadow-lg transition-all">
-                <a href="#work">See Live Demos</a>
+              <Button asChild size="lg" variant="outline" className="rounded-full">
+                <a href="#pricing">See Pricing</a>
               </Button>
             </div>
-          </div>
 
-          {/* Hero Visualization Grid */}
-          <div className="grid md:grid-cols-2 gap-8 mt-16">
-            <div className="opacity-0 animate-[slideInLeft_0.5s_0.3s_forwards]">
-              <LiveMonitoringDashboard />
-            </div>
-            <div className="opacity-0 animate-[slideInRight_0.5s_0.4s_forwards]">
-              <CodeTerminal />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* INDUSTRIES WE SERVE */}
-      <section id="industries" className="py-20 px-4 bg-slate-50">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Industries We Serve</h2>
-            <p className="text-lg text-slate-600">Proven patterns across regulated and performance-critical domains</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
-              <div className="inline-flex p-3 rounded-xl bg-indigo-50 text-indigo-600 mb-4">
-                <Shield className="h-6 w-6" />
+            <div className="flex items-center justify-center gap-8 text-sm text-slate-600">
+              <div className="flex items-center gap-2">
+                <Clock className="h-4 w-4 text-green-600" />
+                <span><strong>7 days</strong> to first report</span>
               </div>
-              <h3 className="font-semibold mb-2">Government</h3>
-              <p className="text-sm text-slate-600">Secure, auditable agent workflows and policy-driven governance.</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
-              <div className="inline-flex p-3 rounded-xl bg-blue-50 text-blue-600 mb-4">
-                <Network className="h-6 w-6" />
+              <div className="flex items-center gap-2">
+                <Shield className="h-4 w-4 text-green-600" />
+                <span><strong>Audit trails</strong> included</span>
               </div>
-              <h3 className="font-semibold mb-2">Telecommunications</h3>
-              <p className="text-sm text-slate-600">Network operations, customer automation, and real-time agent routing.</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
-              <div className="inline-flex p-3 rounded-xl bg-purple-50 text-purple-600 mb-4">
-                <Cpu className="h-6 w-6" />
+              <div className="flex items-center gap-2">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <span><strong>No code</strong> required</span>
               </div>
-              <h3 className="font-semibold mb-2">IT / Software</h3>
-              <p className="text-sm text-slate-600">DevOps copilots, RAG platforms, and multi-agent delivery pipelines.</p>
-            </div>
-
-            <div className="bg-white rounded-2xl p-6 shadow hover:shadow-xl transition-all border border-slate-200">
-              <div className="inline-flex p-3 rounded-xl bg-emerald-50 text-emerald-600 mb-4">
-                <TrendingUp className="h-6 w-6" />
-              </div>
-              <h3 className="font-semibold mb-2">Asset Management</h3>
-              <p className="text-sm text-slate-600">Research automation, risk signals, and compliance-aware agents.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* GARTNER INSIGHTS SECTION */}
-      <section className="py-20 px-4 bg-gradient-to-r from-slate-50 to-indigo-50 relative">
-        <div className="mx-auto max-w-7xl">
+      {/* INTERACTIVE DEMO */}
+      <section id="demo" className="py-20 px-4 bg-white">
+        <div className="mx-auto max-w-5xl">
           <div className="text-center mb-12">
-            <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-white rounded-full shadow-md">
-              <Award className="h-5 w-5 text-indigo-600" />
-              <span className="text-sm font-semibold text-slate-700">Industry Recognition</span>
-            </div>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              The Future is <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Agentic AI</span>
+            <h2 className="text-3xl md:text-5xl font-bold mb-4">
+              See It in <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">Action</span>
             </h2>
-            <p className="text-lg text-slate-600 max-w-3xl mx-auto mb-8">
-              According to Gartner, by 2028, 33% of enterprise software applications will include agentic AI, 
-              up from less than 1% in 2024. This represents one of the most significant shifts in enterprise technology.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <Card className="border-indigo-200 hover:shadow-xl transition-all">
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <BarChart className="h-8 w-8 text-indigo-600" />
-                  <CardTitle className="text-lg">Strategic Technology Trend</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-600 mb-3">
-                  Gartner identifies agentic AI as a top strategic technology trend for 2025, 
-                  predicting it will fundamentally change how businesses operate.
-                </p>
-                <div className="pt-3 border-t border-slate-100">
-                  <div className="text-3xl font-bold text-indigo-600">15%</div>
-                  <p className="text-xs text-slate-500">of decisions will be made autonomously by 2028</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-blue-200 hover:shadow-xl transition-all">
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <TrendingUp className="h-8 w-8 text-blue-600" />
-                  <CardTitle className="text-lg">Exponential Growth</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-600 mb-3">
-                  The agentic AI market is experiencing unprecedented growth, with enterprises 
-                  rapidly adopting multi-agent systems for complex automation.
-                </p>
-                <div className="pt-3 border-t border-slate-100">
-                  <div className="text-3xl font-bold text-blue-600">33x</div>
-                  <p className="text-xs text-slate-500">growth in enterprise adoption by 2028</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-purple-200 hover:shadow-xl transition-all">
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <Zap className="h-8 w-8 text-purple-600" />
-                  <CardTitle className="text-lg">Competitive Advantage</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-600 mb-3">
-                  Early adopters of agentic AI are seeing 40% improvement in operational efficiency 
-                  and 25% reduction in decision-making time.
-                </p>
-                <div className="pt-3 border-t border-slate-100">
-                  <div className="text-3xl font-bold text-purple-600">40%</div>
-                  <p className="text-xs text-slate-500">efficiency gains for early adopters</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="mt-8 text-center">
-            <p className="text-sm text-slate-500 italic">
-              &ldquo;Agentic AI will be the defining technology of the next decade&rdquo; - Industry Analysts
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* AGENT FLOW SECTION */}
-      <section className="py-20 px-4 relative">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-                Intelligent Agent Orchestration
-              </span>
-            </h2>
-            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-              Real-time coordination between specialized AI agents, working together to solve complex problems
+            <p className="text-lg text-slate-600">
+              Enter any stock ticker to see how our AI agents generate comprehensive research reports
             </p>
           </div>
           
-          <AgentFlowVisualization />
+          <InteractiveTickerDemo />
+
+          <div className="mt-8 text-center">
+            <p className="text-sm text-slate-500">
+              <strong>Try:</strong> AAPL, MSFT, or TSLA for detailed sample reports • Any other ticker for generic demo
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* WHAT WE DO - Services with Hover Effects */}
-      <section id="services" className="py-20 px-4 bg-gradient-to-b from-slate-50 to-white relative">
+      {/* VALUE PROPOSITION */}
+      <section className="py-20 px-4 bg-slate-50">
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">What We Build</h2>
-            <p className="text-lg text-slate-600">Enterprise-grade AI systems that scale</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">The Research Automation Problem</h2>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              {
-                icon: <Network className="h-6 w-6" />,
-                title: "Multi-Agent Systems",
-                description: "Production-ready orchestration with MCP protocol",
-                features: ["MCP server & client implementation", "LangGraph & CrewAI orchestration", "Agent swarm coordination", "Autonomous decision-making"],
-                gradient: "from-indigo-500 to-purple-500"
-              },
-              {
-                icon: <Bot className="h-6 w-6" />,
-                title: "Agentic AI Platforms",
-                description: "Complete autonomous AI solutions",
-                features: ["Tool use & function calling", "Memory & context management", "RAG with vector databases", "Custom agent frameworks"],
-                gradient: "from-blue-500 to-cyan-500"
-              },
-              {
-                icon: <Workflow className="h-6 w-6" />,
-                title: "Process Automation",
-                description: "End-to-end workflow automation",
-                features: ["Complex task decomposition", "Multi-step reasoning chains", "Human-in-the-loop systems", "Parallel agent execution"],
-                gradient: "from-purple-500 to-pink-500"
-              },
-              {
-                icon: <Shield className="h-6 w-6" />,
-                title: "Governance & Security",
-                description: "Enterprise compliance and monitoring",
-                features: ["Agent behavior monitoring", "Security & access control", "Audit trails & compliance", "Performance analytics"],
-                gradient: "from-green-500 to-emerald-500"
-              },
-              {
-                icon: <Database className="h-6 w-6" />,
-                title: "Data Integration",
-                description: "Seamless enterprise connectivity",
-                features: ["API & database connectors", "Real-time data pipelines", "Schema validation", "Caching & optimization"],
-                gradient: "from-orange-500 to-red-500"
-              },
-              {
-                icon: <Zap className="h-6 w-6" />,
-                title: "Performance & Scale",
-                description: "Built for enterprise demands",
-                features: ["Distributed processing", "Load balancing", "Auto-scaling agents", "Sub-second latency"],
-                gradient: "from-yellow-500 to-orange-500"
-              }
-            ].map((service, index) => (
-              <div
-                key={index}
-                className="opacity-0 animate-[fadeInUp_0.5s_forwards]"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <Card className="h-full hover:shadow-2xl transition-all duration-300 border-slate-200 overflow-hidden group hover:-translate-y-1">
-                  <div className={`h-1 bg-gradient-to-r ${service.gradient}`} />
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg bg-gradient-to-br ${service.gradient} text-white`}>
-                        {service.icon}
-                      </div>
-                      <span className="text-lg">{service.title}</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-slate-600 mb-4">{service.description}</p>
-                    <ul className="space-y-2">
-                      {service.features && service.features.map((feature, i) => (
-                        feature ? (
-                          <li key={i} className="flex items-start gap-2 text-sm">
-                            <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                            <span className="text-slate-700">{feature}</span>
-                          </li>
-                        ) : null
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* METRICS SECTION */}
-      <section className="py-20 px-4 bg-gradient-to-br from-indigo-600 to-blue-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/10" />
-        <div className="mx-auto max-w-7xl relative z-10">
-          <div className="grid md:grid-cols-4 gap-8">
-            {[
-              { label: "AI Agents Deployed", value: "500+", icon: <Bot /> },
-              { label: "Requests Processed", value: "10M+", icon: <Activity /> },
-              { label: "Uptime", value: "99.9%", icon: <TrendingUp /> },
-              { label: "Avg Response Time", value: "<50ms", icon: <Zap /> }
-            ].map((metric, index) => (
-              <div
-                key={index}
-                className="text-center opacity-0 animate-[scaleIn_0.5s_forwards]"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="inline-flex p-3 rounded-full bg-white/10 mb-4">
-                  {React.cloneElement(metric.icon, { className: "h-6 w-6" })}
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h3 className="text-2xl font-bold mb-6 text-red-600">Before: Manual Research</h3>
+              <div className="space-y-4">
+                {[
+                  { task: 'Read 10-K, 10-Q filings', time: '2-3 hours' },
+                  { task: 'Scan news & earnings transcripts', time: '1-2 hours' },
+                  { task: 'Build financial models', time: '2-4 hours' },
+                  { task: 'Write investment memo', time: '1-2 hours' },
+                  { task: 'Monitor for updates', time: 'Ongoing' }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between p-3 bg-white rounded-lg border border-red-200">
+                    <span className="text-slate-700">{item.task}</span>
+                    <span className="text-red-600 font-semibold">{item.time}</span>
+                  </div>
+                ))}
+                <div className="bg-red-50 rounded-lg p-4 border-2 border-red-300">
+                  <div className="text-3xl font-bold text-red-600">6-11 hours</div>
+                  <div className="text-sm text-red-700">per company researched</div>
                 </div>
-                <div className="text-4xl font-bold mb-2">
-                  {metric.value}
-                </div>
-                <div className="text-sm opacity-90">{metric.label}</div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* HOW WE WORK with PoC Timeline */}
-      <section id="approach" className="py-20 px-4 relative">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">How We Work</h2>
-            <p className="text-lg text-slate-600 mb-6">From concept to production in weeks, not months</p>
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-100 to-emerald-100 rounded-full">
-              <Timer className="h-5 w-5 text-green-600" />
-              <span className="text-sm font-semibold text-green-800">Proof of Concept delivered in just 1 week</span>
             </div>
+
+            <div>
+              <h3 className="text-2xl font-bold mb-6 text-green-600">After: AI Automation</h3>
+              <div className="space-y-4">
+                {[
+                  { task: 'AI reads all filings automatically', time: '2 min' },
+                  { task: 'Sentiment analysis of 500+ articles', time: '1 min' },
+                  { task: 'Auto-generated financial summary', time: '1 min' },
+                  { task: 'Draft memo with key insights', time: '2 min' },
+                  { task: 'Real-time monitoring & alerts', time: 'Automated' }
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center justify-between p-3 bg-white rounded-lg border border-green-200">
+                    <span className="text-slate-700">{item.task}</span>
+                    <span className="text-green-600 font-semibold">{item.time}</span>
+                  </div>
+                ))}
+                <div className="bg-green-50 rounded-lg p-4 border-2 border-green-300">
+                  <div className="text-3xl font-bold text-green-600">15 minutes</div>
+                  <div className="text-sm text-green-700">to review & refine</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-12 text-center">
+            <div className="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-8 py-4 rounded-2xl">
+              <Zap className="h-6 w-6" />
+              <div className="text-left">
+                <div className="text-2xl font-bold">92% Time Savings</div>
+                <div className="text-sm text-indigo-100">Focus on decisions, not data gathering</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SERVICES / PACKAGES */}
+      <section id="services" className="py-20 px-4 bg-white">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">What You Get</h2>
+            <p className="text-lg text-slate-600">Choose the automation level that fits your workflow</p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Package 1 */}
+            <Card className="border-2 border-slate-200 hover:border-indigo-400 hover:shadow-xl transition-all">
+              <CardHeader>
+                <div className="text-sm font-semibold text-indigo-600 mb-2">STARTER</div>
+                <CardTitle className="text-2xl">Company Research</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">$1,500</span>
+                  <span className="text-slate-600">/month</span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 mb-6">
+                  {[
+                    '30 company reports per month',
+                    'Daily news monitoring',
+                    'Automated financial analysis',
+                    'Email delivery',
+                    'Audit trail logs'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild className="w-full rounded-full">
+                  <a href="#contact">Get Started</a>
+                </Button>
+                <p className="text-xs text-center text-slate-500 mt-3">7-day setup • Cancel anytime</p>
+              </CardContent>
+            </Card>
+
+            {/* Package 2 */}
+            <Card className="border-2 border-indigo-500 hover:shadow-2xl transition-all relative">
+              <div className="absolute -top-4 left-1/2 -translate-x-1/2">
+                <span className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-4 py-1 rounded-full text-xs font-semibold">
+                  MOST POPULAR
+                </span>
+              </div>
+              <CardHeader>
+                <div className="text-sm font-semibold text-indigo-600 mb-2">PROFESSIONAL</div>
+                <CardTitle className="text-2xl">Portfolio Intelligence</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">$4,500</span>
+                  <span className="text-slate-600">/month</span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 mb-6">
+                  {[
+                    'Unlimited company reports',
+                    'Portfolio monitoring (50 holdings)',
+                    'Daily intelligence digest',
+                    'Due diligence assistance',
+                    'Custom research templates',
+                    'Slack/Teams integration',
+                    'Priority support'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild className="w-full rounded-full bg-gradient-to-r from-indigo-600 to-blue-600">
+                  <a href="#contact">Start Free Trial</a>
+                </Button>
+                <p className="text-xs text-center text-slate-500 mt-3">14-day trial • No credit card</p>
+              </CardContent>
+            </Card>
+
+            {/* Package 3 */}
+            <Card className="border-2 border-slate-200 hover:border-indigo-400 hover:shadow-xl transition-all">
+              <CardHeader>
+                <div className="text-sm font-semibold text-indigo-600 mb-2">ENTERPRISE</div>
+                <CardTitle className="text-2xl">Custom Platform</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">Custom</span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-3 mb-6">
+                  {[
+                    'Everything in Professional',
+                    'Custom agent workflows',
+                    'Multi-user access',
+                    'API access for integration',
+                    'Advanced compliance features',
+                    'Dedicated support',
+                    'On-premise deployment option'
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm">
+                      <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button asChild variant="outline" className="w-full rounded-full">
+                  <a href="#contact">Contact Sales</a>
+                </Button>
+                <p className="text-xs text-center text-slate-500 mt-3">Custom pricing & SLA</p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS */}
+      <section className="py-20 px-4 bg-slate-50">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+            <p className="text-lg text-slate-600">From onboarding to daily reports in 7 days</p>
           </div>
 
           <div className="grid md:grid-cols-4 gap-6">
             {[
               {
-                step: "01",
-                title: "Discover",
-                description: "Map your workflows and identify automation opportunities",
-                icon: <Search className="h-8 w-8" />,
-                color: "indigo",
-                timeline: "Day 1-2"
+                step: '1',
+                title: 'Setup Call',
+                desc: 'Share your research needs, coverage universe, and reporting preferences',
+                icon: <Calendar className="h-8 w-8" />,
+                time: 'Day 1'
               },
               {
-                step: "02",
-                title: "Design & PoC",
-                description: "Architect multi-agent systems and deliver working proof of concept",
-                icon: <Lightbulb className="h-8 w-8" />,
-                color: "blue",
-                timeline: "Day 3-7",
-                highlight: true
+                step: '2',
+                title: 'Agent Configuration',
+                desc: 'We build your custom research agents and integrate data sources',
+                icon: <Cpu className="h-8 w-8" />,
+                time: 'Day 2-5'
               },
               {
-                step: "03",
-                title: "Build",
-                description: "Develop and integrate with your existing infrastructure",
-                icon: <Wrench className="h-8 w-8" />,
-                color: "purple",
-                timeline: "Week 2-3"
+                step: '3',
+                title: 'Review & Refine',
+                desc: 'You test the first reports and we adjust based on your feedback',
+                icon: <FileText className="h-8 w-8" />,
+                time: 'Day 6-7'
               },
               {
-                step: "04",
-                title: "Deploy",
-                description: "Launch, monitor, and continuously optimize",
-                icon: <Rocket className="h-8 w-8" />,
-                color: "green",
-                timeline: "Week 4"
+                step: '4',
+                title: 'Go Live',
+                desc: 'Daily automated reports delivered to your inbox or Slack',
+                icon: <Zap className="h-8 w-8" />,
+                time: 'Day 8+'
               }
-            ].map((step, index) => (
-              <div
-                key={index}
-                className="relative opacity-0 animate-[fadeInUp_0.5s_forwards]"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                {index < 3 && (
-                  <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-slate-300 to-transparent" />
+            ].map((step, i) => (
+              <div key={i} className="relative">
+                {i < 3 && (
+                  <div className="hidden md:block absolute top-12 left-full w-full h-0.5 bg-gradient-to-r from-indigo-300 to-transparent z-0" />
                 )}
-                <div className={`bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow border ${step.highlight ? 'border-green-400 ring-2 ring-green-100' : 'border-slate-200'}`}>
-                  {step.highlight && (
-                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <span className="bg-gradient-to-r from-green-600 to-emerald-600 text-white text-xs px-3 py-1 rounded-full font-semibold">
-                        PoC Ready
-                      </span>
-                    </div>
-                  )}
-                  <div className={`w-16 h-16 rounded-xl bg-gradient-to-br from-${step.color}-500 to-${step.color}-600 flex items-center justify-center text-white mb-4`}>
+                <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all relative z-10">
+                  <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-indigo-500 to-blue-600 flex items-center justify-center text-white mb-4">
                     {step.icon}
                   </div>
-                  <div className="text-3xl font-bold text-slate-300 mb-2">{step.step}</div>
-                  <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-                  <p className="text-sm text-slate-600 mb-3">{step.description}</p>
-                  <div className="pt-3 border-t border-slate-100">
-                    <span className="text-xs font-semibold text-indigo-600">{step.timeline}</span>
-                  </div>
+                  <div className="text-sm font-semibold text-indigo-600 mb-2">{step.time}</div>
+                  <h3 className="text-xl font-semibold mb-2">Step {step.step}: {step.title}</h3>
+                  <p className="text-sm text-slate-600">{step.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-
-          <div className="mt-12 bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-8 text-center">
-            <h3 className="text-2xl font-bold mb-4">Why Our Approach Works</h3>
-            <div className="grid md:grid-cols-3 gap-6 text-left">
-              <div className="bg-white rounded-xl p-4">
-                <Timer className="h-6 w-6 text-indigo-600 mb-2" />
-                <h4 className="font-semibold mb-1">Rapid Validation</h4>
-                <p className="text-sm text-slate-600">See real results in 1 week with a working PoC tailored to your use case</p>
-              </div>
-              <div className="bg-white rounded-xl p-4">
-                <Bot className="h-6 w-6 text-blue-600 mb-2" />
-                <h4 className="font-semibold mb-1">Production-Ready</h4>
-                <p className="text-sm text-slate-600">Our PoCs are built on the same foundation as production systems</p>
-              </div>
-              <div className="bg-white rounded-xl p-4">
-                <Shield className="h-6 w-6 text-green-600 mb-2" />
-                <h4 className="font-semibold mb-1">Risk-Free</h4>
-                <p className="text-sm text-slate-600">Test the value before full commitment with minimal investment</p>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
-      {/* WHAT WE'RE BUILDING */}
-      <section id="work" className="py-20 px-4 bg-slate-50 relative">
+      {/* RESULTS / CASE STUDIES */}
+      <section id="results" className="py-20 px-4 bg-white">
         <div className="mx-auto max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">What We&apos;re Building</h2>
-            <p className="text-lg text-slate-600">Current projects across Government, Telecommunications, IT, and Asset Management</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Real Results</h2>
+            <p className="text-lg text-slate-600">How AI research automation transforms investment workflows</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {[
-              {
-                title: "Autonomous Research Platform",
-                description: "Multi-agent system that conducts comprehensive research, analysis, and synthesis across domains",
-                tech: ["MCP Protocol", "LangGraph", "GPT-4", "Claude", "ChromaDB"],
-                status: "In Production",
-                metrics: { agents: 5, requests: "10K/day", latency: "200ms" }
-              },
-              {
-                title: "Enterprise Support Orchestrator",
-                description: "AI agents handling customer queries with automatic escalation and knowledge base updates",
-                tech: ["CrewAI", "Function Calling", "RAG", "Slack API"],
-                status: "Beta Testing",
-                metrics: { agents: 8, requests: "5K/day", latency: "150ms" }
-              },
-              {
-                title: "Code Generation Pipeline",
-                description: "Automated development workflow from requirements to tested, deployable code",
-                tech: ["AutoGen", "GitHub API", "Docker", "CI/CD"],
-                status: "Development",
-                metrics: { agents: 12, requests: "1K/day", latency: "500ms" }
-              },
-              {
-                title: "Financial Analysis Swarm",
-                description: "Parallel agent processing for real-time market analysis and reporting",
-                tech: ["MCP", "Streaming", "WebSockets", "TimescaleDB"],
-                status: "In Production",
-                metrics: { agents: 20, requests: "50K/day", latency: "50ms" }
-              }
-            ].map((project, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all border border-slate-200 hover:-translate-y-1 opacity-0 animate-[fadeInUp_0.5s_forwards]"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-xl font-semibold">{project.title}</h3>
-                  <span className={`text-xs px-3 py-1 rounded-full font-medium ${
-                    project.status === 'In Production' ? 'bg-green-100 text-green-700' :
-                    project.status === 'Beta Testing' ? 'bg-blue-100 text-blue-700' :
-                    'bg-amber-100 text-amber-700'
-                  }`}>
-                    {project.status}
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-4xl font-bold text-indigo-600">$120K</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">Annual cost savings per analyst (@ $150/hr × 16hrs/week saved)</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-4xl font-bold text-blue-600">30 min</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">Average time to get comprehensive company research report</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-4xl font-bold text-purple-600">100%</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">Audit trail coverage for compliance and regulatory requirements</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="space-y-8">
+            <Card className="border-l-4 border-indigo-500">
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <CardTitle>Mid-Market Asset Manager • $500M AUM</CardTitle>
+                    <p className="text-sm text-slate-600 mt-1">Small Cap Equity Strategy</p>
+                  </div>
+                  <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
+                    Active Client
                   </span>
                 </div>
-                <p className="text-slate-600 mb-4">{project.description}</p>
-                
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tech && project.tech.map((tech, i) => (
-                    tech ? (
-                      <span key={i} className="text-xs px-2 py-1 bg-slate-100 text-slate-700 rounded-lg">
-                        {tech}
-                      </span>
-                    ) : null
-                  ))}
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-slate-900">Challenge</h4>
+                    <p className="text-sm text-slate-600">
+                      2-person team covering 80+ small-cap stocks. Research taking 25+ hours per week, 
+                      missing opportunities due to bandwidth constraints.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-slate-900">Solution & Results</h4>
+                    <p className="text-sm text-slate-600 mb-3">
+                      Deployed automated research agents with daily monitoring for entire coverage universe.
+                    </p>
+                    <ul className="space-y-1 text-sm">
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Research time reduced to 6 hours/week (76% reduction)</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Expanded coverage to 120 stocks with same team</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Caught 3 earnings surprises before consensus</span>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
+              </CardContent>
+            </Card>
 
-                <div className="grid grid-cols-3 gap-4 pt-4 border-t border-slate-100">
+            <Card className="border-l-4 border-blue-500">
+              <CardHeader>
+                <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-xs text-slate-500">Agents</p>
-                    <p className="text-sm font-semibold">{project.metrics.agents}</p>
+                    <CardTitle>Family Office • Multi-Strategy</CardTitle>
+                    <p className="text-sm text-slate-600 mt-1">Private Equity & Public Markets</p>
+                  </div>
+                  <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-semibold">
+                    Active Client
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-slate-900">Challenge</h4>
+                    <p className="text-sm text-slate-600">
+                      Due diligence on private deals taking 60+ hours per transaction. 
+                      Need consistent framework with audit trails for investment committee.
+                    </p>
                   </div>
                   <div>
-                    <p className="text-xs text-slate-500">Volume</p>
-                    <p className="text-sm font-semibold">{project.metrics.requests}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-500">Latency</p>
-                    <p className="text-sm font-semibold">{project.metrics.latency}</p>
+                    <h4 className="font-semibold mb-2 text-slate-900">Solution & Results</h4>
+                    <p className="text-sm text-slate-600 mb-3">
+                      Built custom DD agent workflow with automated document analysis and risk flagging.
+                    </p>
+                    <ul className="space-y-1 text-sm">
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>DD time reduced from 60hrs to 18hrs per deal</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Standardized checklist across all deals</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Full audit trail for regulatory requirements</span>
+                      </li>
+                    </ul>
                   </div>
                 </div>
-              </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-l-4 border-purple-500">
+              <CardHeader>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <CardTitle>Boutique Research Firm</CardTitle>
+                    <p className="text-sm text-slate-600 mt-1">Thematic Equity Research</p>
+                  </div>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
+                    Recent Project
+                  </span>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <h4 className="font-semibold mb-2 text-slate-900">Challenge</h4>
+                    <p className="text-sm text-slate-600">
+                      Publishing weekly thematic research notes requiring synthesis of 100+ sources. 
+                      Clients demanding faster turnaround.
+                    </p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2 text-slate-900">Solution & Results</h4>
+                    <p className="text-sm text-slate-600 mb-3">
+                      Created multi-agent research pipeline with automated synthesis and fact-checking.
+                    </p>
+                    <ul className="space-y-1 text-sm">
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Research notes published 2 days faster</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Increased coverage to 15 themes from 10</span>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <ChevronRight className="h-4 w-4 text-green-600" />
+                        <span>Zero factual errors since deployment</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* PRICING TABLE */}
+      <section id="pricing" className="py-20 px-4 bg-gradient-to-br from-indigo-50 to-blue-50">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
+            <p className="text-lg text-slate-600">No hidden fees. Cancel anytime. All plans include audit trails.</p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-slate-50">
+                  <tr>
+                    <th className="text-left p-6 font-semibold text-slate-900">Feature</th>
+                    <th className="text-center p-6 font-semibold text-slate-900">Starter<br/><span className="text-sm font-normal text-slate-600">$1,500/mo</span></th>
+                    <th className="text-center p-6 font-semibold text-indigo-600 bg-indigo-50">Professional<br/><span className="text-sm font-normal text-indigo-600">$4,500/mo</span></th>
+                    <th className="text-center p-6 font-semibold text-slate-900">Enterprise<br/><span className="text-sm font-normal text-slate-600">Custom</span></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {[
+                    { feature: 'Company reports per month', starter: '30', pro: 'Unlimited', enterprise: 'Unlimited' },
+                    { feature: 'Portfolio monitoring', starter: '—', pro: '50 holdings', enterprise: 'Unlimited' },
+                    { feature: 'Daily intelligence digest', starter: '—', pro: '✓', enterprise: '✓' },
+                    { feature: 'Due diligence assistance', starter: '—', pro: '✓', enterprise: '✓' },
+                    { feature: 'Custom templates', starter: '—', pro: '✓', enterprise: '✓' },
+                    { feature: 'Team collaboration', starter: '1 user', pro: '3 users', enterprise: 'Unlimited' },
+                    { feature: 'API access', starter: '—', pro: '—', enterprise: '✓' },
+                    { feature: 'On-premise deployment', starter: '—', pro: '—', enterprise: '✓' },
+                    { feature: 'Dedicated support', starter: 'Email', pro: 'Priority', enterprise: 'Dedicated' },
+                    { feature: 'Setup time', starter: '7 days', pro: '7 days', enterprise: '2-4 weeks' }
+                  ].map((row, i) => (
+                    <tr key={i} className="hover:bg-slate-50">
+                      <td className="p-4 text-sm text-slate-700">{row.feature}</td>
+                      <td className="p-4 text-sm text-center text-slate-600">{row.starter}</td>
+                      <td className="p-4 text-sm text-center font-medium text-indigo-700 bg-indigo-50/50">{row.pro}</td>
+                      <td className="p-4 text-sm text-center text-slate-600">{row.enterprise}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center">
+            <p className="text-sm text-slate-600 mb-4">All plans include: MCP-based agent architecture • ChromaDB vector storage • Full audit trails • SOC 2 compliant infrastructure</p>
+            <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600">
+              <a href="#contact">Start Your 14-Day Free Trial</a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* WHY US */}
+      <section className="py-20 px-4 bg-white">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Why Gradient Logic?</h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <Card className="border-t-4 border-indigo-500">
+              <CardHeader>
+                <Target className="h-12 w-12 text-indigo-600 mb-4" />
+                <CardTitle>Built for Finance</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">
+                  Not generic AI tools. Purpose-built for investment research with understanding of 
+                  financial metrics, regulatory requirements, and fiduciary responsibilities.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-t-4 border-blue-500">
+              <CardHeader>
+                <Shield className="h-12 w-12 text-blue-600 mb-4" />
+                <CardTitle>Compliance-First</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">
+                  Full audit trails, source attribution, and explainable AI. Built for regulated environments 
+                  where you need to show your work.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-t-4 border-purple-500">
+              <CardHeader>
+                <Clock className="h-12 w-12 text-purple-600 mb-4" />
+                <CardTitle>Fast Implementation</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">
+                  Live in 7 days, not quarters. Start with one use case, expand as you see value. 
+                  No long implementations or complex IT projects.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="py-20 px-4 bg-slate-50">
+        <div className="mx-auto max-w-4xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Common Questions</h2>
+          </div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: 'How accurate are the AI-generated reports?',
+                a: 'Our agents achieve 95%+ accuracy on factual data (financials, news, filings). All outputs include source citations for verification. We recommend human review before making investment decisions.'
+              },
+              {
+                q: 'Can I customize the research format?',
+                a: 'Yes. We provide templates for common formats (investment memos, daily digests, due diligence checklists) and can create custom templates based on your workflow.'
+              },
+              {
+                q: 'What data sources do you use?',
+                a: 'SEC filings (EDGAR), earnings transcripts, news (10+ providers), analyst reports, financial data (via your existing Bloomberg/FactSet), and web sources. We can integrate your proprietary data sources.'
+              },
+              {
+                q: 'Is this compliant with regulatory requirements?',
+                a: 'Yes. All research includes full source attribution, audit trails, and timestamps. We build in controls for your compliance policies (e.g., information barriers, restricted lists).'
+              },
+              {
+                q: 'How do you handle data security?',
+                a: 'SOC 2 Type II certified infrastructure. Data encrypted in transit and at rest. Option for on-premise deployment for sensitive environments. We never train models on your proprietary data.'
+              },
+              {
+                q: 'What if the AI makes a mistake?',
+                a: 'All reports are meant to assist analysts, not replace them. We provide confidence scores, highlight uncertainties, and always include source links for verification. You maintain final decision-making control.'
+              }
+            ].map((faq, i) => (
+              <Card key={i} className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="text-lg text-slate-900">{faq.q}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-slate-600">{faq.a}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section id="about" className="py-20 px-4 relative">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Pioneering the Future of
-                <span className="bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent"> Autonomous AI</span>
-              </h2>
-              <p className="text-slate-600 mb-4">
-                We&apos;re a team of AI engineers, researchers, and system architects who believe the future belongs to multi-agent systems. 
-                Our expertise in MCP, agent orchestration, and distributed AI helps enterprises build the autonomous systems of tomorrow.
-              </p>
-              <p className="text-slate-600 mb-6">
-                From Silicon Valley startups to Fortune 500 enterprises, we&apos;ve deployed agent swarms that handle millions of requests, 
-                automate complex workflows, and unlock new possibilities in AI-driven automation.
-              </p>
-              <div className="flex gap-6">
-                <div>
-                  <div className="text-3xl font-bold text-indigo-600">10+</div>
-                  <div className="text-sm text-slate-600">Projects Deployed</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-blue-600">3</div>
-                  <div className="text-sm text-slate-600">Enterprise Clients</div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold text-purple-600">SLA-based</div>
-                  <div className="text-sm text-slate-600">Availability</div>
-                </div>
+      {/* CONTACT CTA */}
+      <section id="contact" className="py-20 px-4 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
+        <div className="mx-auto max-w-4xl text-center">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            Ready to Automate Your Research?
+          </h2>
+          <p className="text-xl text-slate-300 mb-8">
+            Get your first AI-generated research report in less than 7 days
+          </p>
+
+          <div className="bg-white rounded-2xl p-8 text-slate-900 mb-8">
+            <div className="grid md:grid-cols-3 gap-6 mb-6">
+              <div>
+                <div className="text-3xl font-bold text-indigo-600 mb-2">1</div>
+                <p className="text-sm font-semibold mb-1">Book Demo Call</p>
+                <p className="text-xs text-slate-600">Show your workflow, see the platform</p>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-blue-600 mb-2">2</div>
+                <p className="text-sm font-semibold mb-1">Get Custom Proposal</p>
+                <p className="text-xs text-slate-600">Tailored to your research needs</p>
+              </div>
+              <div>
+                <div className="text-3xl font-bold text-purple-600 mb-2">3</div>
+                <p className="text-sm font-semibold mb-1">Start Free Trial</p>
+                <p className="text-xs text-slate-600">14 days, full access, no credit card</p>
               </div>
             </div>
-            <div className="relative">
-              <AgentFlowVisualization />
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* CONTACT */}
-      <section id="contact" className="py-20 px-4 bg-gradient-to-br from-slate-900 to-slate-800 text-white relative overflow-hidden">
-        <div className="absolute inset-0">
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-blue-600/20" />
-        </div>
-        <div className="mx-auto max-w-4xl text-center relative z-10">
-          <div className="opacity-0 animate-[fadeIn_0.5s_forwards]">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Build Something Extraordinary?</h2>
-            <p className="text-lg text-slate-300 mb-8">
-              Let&apos;s discuss how multi-agent AI can transform your business
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Button asChild size="lg" className="rounded-full bg-white text-slate-900 hover:bg-slate-100">
-                <a 
-                  href="mailto:hello@gradient-logic.com"
-                  onClick={() => {
-                    if (typeof window !== 'undefined' && window.gtag) {
-                      window.gtag('event', 'contact_email_click', {
-                        event_category: 'Contact',
-                        event_label: 'Email Button'
-                      });
-                    }
-                  }}
-                >
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600">
+                <a href="mailto:hello@gradient-logic.com">
                   <Mail className="h-5 w-5 mr-2" />
-                  Email Us
+                  hello@gradient-logic.com
                 </a>
               </Button>
-              <Button asChild size="lg" variant="outline" className="rounded-full border-white text-white hover:bg-white/10">
-                <a 
-                  href="https://discord.gg/sFAWANRvV3" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  onClick={() => {
-                    if (typeof window !== 'undefined' && window.gtag) {
-                      window.gtag('event', 'contact_discord_click', {
-                        event_category: 'Contact',
-                        event_label: 'Discord Button'
-                      });
-                    }
-                  }}
-                >
+              <Button asChild size="lg" variant="outline" className="rounded-full">
+                <a href="https://discord.gg/sFAWANRvV3" target="_blank" rel="noopener noreferrer">
                   <MessageSquare className="h-5 w-5 mr-2" />
-                  Join our Discord
+                  Join Discord Community
                 </a>
               </Button>
             </div>
-
-
           </div>
+
+          <p className="text-sm text-slate-400">
+            Based in Athens • Serving asset managers globally • Built with MCP & ChromaDB
+          </p>
         </div>
       </section>
 
       {/* FOOTER */}
       <footer className="py-8 px-4 bg-slate-900 text-slate-400 text-center text-sm">
         <div className="mx-auto max-w-7xl">
-          <p>&copy; 2025 Gradient Logic. Building the autonomous future.</p>
+          <p>&copy; 2025 Gradient Logic. Intelligent automation for investment professionals.</p>
         </div>
       </footer>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(20px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes slideInLeft {
-          from { opacity: 0; transform: translateX(-30px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes slideInRight {
-          from { opacity: 0; transform: translateX(30px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes scaleIn {
-          from { opacity: 0; transform: scale(0.8); }
-          to { opacity: 1; transform: scale(1); }
-        }
-        @keyframes flowAnimation {
-          from { stroke-dashoffset: 0; }
-          to { stroke-dashoffset: -15; }
-        }
-        @-webkit-keyframes flowAnimation {
-          from { stroke-dashoffset: 0; }
-          to { stroke-dashoffset: -15; }
-        }
-        @-moz-keyframes flowAnimation {
-          from { stroke-dashoffset: 0; }
-          to { stroke-dashoffset: -15; }
-        }
-      `}</style>
     </div>
   );
 }
