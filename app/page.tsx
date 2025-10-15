@@ -929,6 +929,155 @@ export default function GradientLogic() {
         </div>
       </section>
 
+      {/* COMPETITOR COMPARISON */}
+      <section className="py-20 px-4 bg-white">
+        <div className="mx-auto max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">How We Compare</h2>
+            <p className="text-lg text-slate-600">Built for boutique firms that can&apos;t afford enterprise pricing</p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="border-b-2 border-slate-200">
+                  <th className="text-left p-4 font-semibold text-slate-900">Feature</th>
+                  <th className="text-center p-4 font-semibold text-indigo-600 bg-indigo-50">Gradient Logic</th>
+                  <th className="text-center p-4 font-semibold text-slate-600">AlphaSense</th>
+                  <th className="text-center p-4 font-semibold text-slate-600">Tegus</th>
+                  <th className="text-center p-4 font-semibold text-slate-600">Bloomberg</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-slate-100">
+                  <td className="p-4 font-medium">Annual Cost (per seat)</td>
+                  <td className="text-center p-4 bg-indigo-50">
+                    <div className="font-bold text-indigo-600">$1.5K - $4.5K</div>
+                  </td>
+                  <td className="text-center p-4 text-slate-600">$12K - $50K+</td>
+                  <td className="text-center p-4 text-slate-600">$20K - $100K+</td>
+                  <td className="text-center p-4 text-slate-600">$24K - $30K</td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="p-4 font-medium">Pre-built Research Reports</td>
+                  <td className="text-center p-4 bg-indigo-50"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                  <td className="text-center p-4 text-slate-400">Search only</td>
+                  <td className="text-center p-4 text-slate-400">Search only</td>
+                  <td className="text-center p-4 text-slate-400">Manual</td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="p-4 font-medium">Time to Value</td>
+                  <td className="text-center p-4 bg-indigo-50">
+                    <div className="font-bold text-indigo-600">7 days</div>
+                  </td>
+                  <td className="text-center p-4 text-slate-600">2-3 months</td>
+                  <td className="text-center p-4 text-slate-600">1-2 months</td>
+                  <td className="text-center p-4 text-slate-600">Training required</td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="p-4 font-medium">AI-Powered Analysis</td>
+                  <td className="text-center p-4 bg-indigo-50"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                  <td className="text-center p-4"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                  <td className="text-center p-4 text-slate-400">Limited</td>
+                  <td className="text-center p-4 text-slate-400">Basic copilot</td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="p-4 font-medium">Best For</td>
+                  <td className="text-center p-4 bg-indigo-50">
+                    <div className="text-sm">Boutique firms<br/>$50M-$500M AUM</div>
+                  </td>
+                  <td className="text-center p-4 text-slate-600">
+                    <div className="text-sm">Enterprise<br/>$1B+ AUM</div>
+                  </td>
+                  <td className="text-center p-4 text-slate-600">
+                    <div className="text-sm">PE/VC firms<br/>Primary research</div>
+                  </td>
+                  <td className="text-center p-4 text-slate-600">
+                    <div className="text-sm">All-in-one<br/>Large teams</div>
+                  </td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="p-4 font-medium">Automated Workflows</td>
+                  <td className="text-center p-4 bg-indigo-50"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                  <td className="text-center p-4 text-slate-400">Manual search</td>
+                  <td className="text-center p-4 text-slate-400">Manual search</td>
+                  <td className="text-center p-4 text-slate-400">Manual</td>
+                </tr>
+                <tr className="border-b border-slate-100">
+                  <td className="p-4 font-medium">Source Attribution</td>
+                  <td className="text-center p-4 bg-indigo-50"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                  <td className="text-center p-4"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                  <td className="text-center p-4"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                  <td className="text-center p-4"><CheckCircle2 className="h-6 w-6 text-green-500 mx-auto" /></td>
+                </tr>
+                <tr>
+                  <td className="p-4 font-medium">Contract Flexibility</td>
+                  <td className="text-center p-4 bg-indigo-50">
+                    <div className="text-sm font-bold text-indigo-600">Monthly or Annual</div>
+                  </td>
+                  <td className="text-center p-4 text-slate-600">Annual only</td>
+                  <td className="text-center p-4 text-slate-600">Annual only</td>
+                  <td className="text-center p-4 text-slate-600">Annual only</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            <Card className="border-t-4 border-green-500">
+              <CardHeader>
+                <Target className="h-10 w-10 text-green-600 mb-3" />
+                <CardTitle>10x More Affordable</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">
+                  Enterprise-grade research automation at a price point accessible to boutique firms 
+                  and family offices. No long-term contracts required.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-t-4 border-blue-500">
+              <CardHeader>
+                <Zap className="h-10 w-10 text-blue-600 mb-3" />
+                <CardTitle>Built for Speed</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">
+                  Pre-built workflows mean you start getting value immediately. No months of training, 
+                  no complex implementations, no IT projects.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-t-4 border-purple-500">
+              <CardHeader>
+                <Bot className="h-10 w-10 text-purple-600 mb-3" />
+                <CardTitle>AI-First Platform</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-slate-600">
+                  Not a legacy platform with AI bolted on. Built from the ground up with modern LLMs 
+                  and multi-agent orchestration for better results.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-12 text-center">
+            <p className="text-lg text-slate-600 mb-6">
+              See the difference in action
+            </p>
+            <Button asChild size="lg" className="rounded-full bg-gradient-to-r from-indigo-600 to-blue-600">
+              <a href="https://calendly.com/gradient-logic/discovery-call" target="_blank" rel="noopener noreferrer">
+                <Calendar className="h-5 w-5 mr-2" />
+                Book a Side-by-Side Demo
+              </a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* CONTACT CTA */}
       <section id="contact" className="py-20 px-4 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
         <div className="mx-auto max-w-4xl text-center">
