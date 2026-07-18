@@ -1,3 +1,60 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --bg: #e8eef1;
+  --bg-elevated: #f4f7f8;
+  --ink: #0e1518;
+  --ink-soft: #3d4a50;
+  --muted: #6b7a82;
+  --line: #c5d0d6;
+  --accent: #0b6e6a;
+  --accent-deep: #084f4c;
+  --accent-soft: #d4eeec;
+  --glow: #7ec8c3;
+  --sand: #d9cfc0;
+  --font-display: "Literata", "Times New Roman", serif;
+  --font-body: "Source Sans 3", system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+  }
+
+  ::selection {
+    background: var(--accent-soft);
+    color: var(--ink);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .hero-plane {
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 20%, rgba(126, 200, 195, 0.45), transparent 55%),
+      radial-gradient(ellipse 70% 50% at 85% 10%, rgba(217, 207, 192, 0.55), transparent 50%),
+      radial-gradient(ellipse 60% 70% at 70% 85%, rgba(11, 110, 106, 0.18), transparent 55%),
+      linear-gradient(165deg, #dfe8eb 0%, #e8eef1 40%, #d5e2e4 100%);
+  }
+
+  .section-wash {
+    background:
+      linear-gradient(180deg, rgba(244, 247, 248, 0.92), rgba(232, 238, 241, 0.98));
+  }
+}

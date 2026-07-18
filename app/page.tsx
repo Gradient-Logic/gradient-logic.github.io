@@ -1,611 +1,592 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   ArrowRight,
-  MessageSquare,
   Brain,
-  Shield,
-  Layers,
-  Store,
-  Search,
   Bot,
-  CheckCircle2,
-  Mail,
-  Linkedin,
-  Github,
-  ExternalLink,
   Calendar,
+  CheckCircle2,
+  Github,
+  Layers,
+  Linkedin,
+  Mail,
+  Menu,
+  Phone,
+  Search,
+  Store,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SITE, copy, type Locale } from "@/lib/content";
 
-const CALENDLY = "https://calendly.com/hello-gradient-logic/30min";
-const EMAIL = "pavlos.polydoras@gradient-logic.com";
+const LOCALE_KEY = "gl-locale";
+
+function useLocale() {
+  const [locale, setLocale] = useState<Locale>("el");
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const saved = window.localStorage.getItem(LOCALE_KEY) as Locale | null;
+    if (saved === "el" || saved === "en") setLocale(saved);
+    setReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+    window.localStorage.setItem(LOCALE_KEY, locale);
+    document.documentElement.lang = locale;
+  }, [locale, ready]);
+
+  return { locale, setLocale, t: copy[locale] };
+}
 
 export default function GradientLogicPage() {
+  const { locale, setLocale, t } = useLocale();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
+  const hasPhone = Boolean(SITE.phone);
+
+  const nav = [
+    { href: "#services", label: t.nav.services },
+    { href: "#work", label: t.nav.work },
+    { href: "#storemate", label: t.nav.storemate },
+    { href: "#about", label: t.nav.about },
+    { href: "#contact", label: t.nav.contact },
+  ];
+
+  const fade = reduceMotion
+    ? { initial: false as const }
+    : {
+        initial: { opacity: 0, y: 16 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const },
+      };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50 text-slate-900">
-      {/* ── NAVBAR ── */}
-      <header className="sticky top-0 z-40 border-b border-slate-200 backdrop-blur supports-[backdrop-filter]:bg-white/70">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
+    <div className="min-h-screen overflow-x-hidden bg-mist text-ink">
+      {/* ── NAV ── */}
+      <header className="sticky top-0 z-50 border-b border-line/70 bg-mist/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-content items-center justify-between gap-4 px-4 py-3 sm:px-6">
           <a
             href="#home"
-            className="text-xl font-semibold tracking-tight"
+            className="font-display text-lg font-semibold tracking-tight sm:text-xl"
           >
-            Gradient <span className="text-indigo-600">Logic</span>
+            Gradient <span className="text-teal">Logic</span>
           </a>
-          <nav className="hidden items-center gap-6 text-sm md:flex">
-            <a href="#services" className="hover:text-indigo-700">
-              Services
-            </a>
-            <a href="#work" className="hover:text-indigo-700">
-              Work
-            </a>
-            <a href="#storemate" className="hover:text-indigo-700">
-              StoreMate AI
-            </a>
-            <a href="#about" className="hover:text-indigo-700">
-              About
-            </a>
-            <a href="#contact" className="hover:text-indigo-700">
-              Contact
-            </a>
+
+          <nav className="hidden items-center gap-7 text-sm text-ink-soft md:flex">
+            {nav.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="transition-colors hover:text-teal-deep"
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
-          <Button asChild className="rounded-2xl">
-            <a href="#contact">
-              <MessageSquare className="mr-2 h-4 w-4" />
-              Let&apos;s talk
-            </a>
-          </Button>
+
+          <div className="flex items-center gap-2">
+            <div
+              className="flex rounded-sm border border-line bg-white/70 p-0.5 text-xs font-semibold"
+              role="group"
+              aria-label="Language"
+            >
+              {(["el", "en"] as Locale[]).map((code) => (
+                <button
+                  key={code}
+                  type="button"
+                  onClick={() => setLocale(code)}
+                  className={`px-2.5 py-1.5 uppercase transition-colors ${
+                    locale === code
+                      ? "bg-ink text-white"
+                      : "text-ink-soft hover:text-ink"
+                  }`}
+                  aria-pressed={locale === code}
+                >
+                  {code}
+                </button>
+              ))}
+            </div>
+
+            <Button asChild className="hidden rounded-sm sm:inline-flex">
+              <a href="#contact">{t.nav.cta}</a>
+            </Button>
+
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-sm border border-line bg-white/70 md:hidden"
+              aria-label={menuOpen ? "Close menu" : "Open menu"}
+              onClick={() => setMenuOpen((v) => !v)}
+            >
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
         </div>
+
+        {menuOpen && (
+          <div className="border-t border-line bg-mist-elevated px-4 py-4 md:hidden">
+            <nav className="flex flex-col gap-3 text-sm">
+              {nav.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  className="py-1 text-ink-soft hover:text-teal-deep"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item.label}
+                </a>
+              ))}
+              <a
+                href="#contact"
+                className="pt-2 font-semibold text-teal-deep"
+                onClick={() => setMenuOpen(false)}
+              >
+                {t.nav.cta}
+              </a>
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* ── HERO ── */}
-      <section id="home" className="relative overflow-hidden">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-20 lg:grid-cols-12 lg:py-28">
-          <div className="lg:col-span-7">
-            <motion.h1
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-4xl/tight font-extrabold md:text-6xl/tight"
-            >
-              We design and build AI systems{" "}
-              <span className="text-indigo-600">that actually ship.</span>
-            </motion.h1>
-            <p className="mt-5 max-w-2xl text-lg text-slate-600">
-              From enterprise AI strategy to production-ready products. We help
-              organizations go from idea to deployed AI &mdash; in weeks, not
-              quarters.
+      <section id="home" className="relative min-h-[88vh] overflow-hidden">
+        <div className="hero-plane absolute inset-0" aria-hidden />
+        <div
+          className="pointer-events-none absolute -left-24 top-16 h-72 w-72 animate-drift rounded-full bg-teal-glow/30 blur-3xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -right-16 bottom-10 h-80 w-80 animate-soft-pulse rounded-full bg-sand/50 blur-3xl"
+          aria-hidden
+        />
+
+        <div className="relative mx-auto flex min-h-[88vh] max-w-content flex-col justify-end px-4 pb-16 pt-24 sm:px-6 sm:pb-20 lg:justify-center lg:pb-24 lg:pt-20">
+          <motion.p
+            {...fade}
+            className="font-display text-[clamp(2.75rem,12vw,8.5rem)] font-bold leading-[0.9] tracking-tight text-ink"
+          >
+            {t.hero.brand}
+          </motion.p>
+
+          <motion.div
+            {...fade}
+            transition={
+              reduceMotion
+                ? undefined
+                : { duration: 0.65, ease: [0.22, 1, 0.36, 1] as const, delay: 0.12 }
+            }
+            className="mt-8 max-w-2xl"
+          >
+            <h1 className="font-display text-2xl font-semibold leading-snug text-ink sm:text-3xl md:text-4xl text-balance">
+              {t.hero.headline}
+            </h1>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-soft sm:text-lg">
+              {t.hero.sub}
             </p>
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="rounded-2xl">
-                <a href={CALENDLY} target="_blank" rel="noopener noreferrer">
-                  Book a call
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild size="lg" className="rounded-sm">
+                <a href={SITE.calendly} target="_blank" rel="noopener noreferrer">
+                  {t.hero.ctaPrimary}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="rounded-2xl"
-              >
-                <a href="#storemate">See StoreMate AI</a>
-              </Button>
+              {hasPhone ? (
+                <Button asChild size="lg" variant="outline" className="rounded-sm">
+                  <a href={`tel:${SITE.phone}`}>
+                    <Phone className="mr-2 h-4 w-4" />
+                    {t.contact.callUs}
+                  </a>
+                </Button>
+              ) : (
+                <Button asChild size="lg" variant="outline" className="rounded-sm">
+                  <a href="#storemate">{t.hero.ctaSecondary}</a>
+                </Button>
+              )}
             </div>
-            <p className="mt-8 text-xs text-slate-500">
-              Based in Athens &middot; Currently leading AI transformation for a
-              global engineering enterprise
-            </p>
-          </div>
-          <div className="lg:col-span-5">
-            <div className="relative">
-              <div className="absolute -inset-6 rounded-full bg-indigo-100/60 blur-3xl" />
-              <Card className="relative border-slate-200 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    What we bring to the table
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 text-sm">
-                    <li className="flex items-start gap-2">
-                      <Brain className="mt-0.5 h-4 w-4 text-indigo-600" />
-                      Enterprise AI strategy &amp; architecture design
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Layers className="mt-0.5 h-4 w-4 text-indigo-600" />
-                      Agents, RAG systems, and copilots &mdash; built to
-                      production
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Shield className="mt-0.5 h-4 w-4 text-indigo-600" />
-                      Security-first approach: GDPR, evals, guardrails
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <Store className="mt-0.5 h-4 w-4 text-indigo-600" />
-                      StoreMate AI &mdash; our own product for physical stores
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+
+            <p className="mt-8 text-sm text-muted">{t.hero.location}</p>
+          </motion.div>
         </div>
       </section>
 
       {/* ── SERVICES ── */}
-      <section id="services" className="border-y border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-16">
-          <h2 className="text-2xl font-bold md:text-4xl">What we do</h2>
-          <p className="mt-2 max-w-2xl text-slate-600">
-            Two modes: hands-on consulting for enterprises, and a turnkey
-            product for brick-and-mortar stores.
-          </p>
-          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                icon: Brain,
-                title: "AI Strategy & Architecture",
-                desc: "Use-case discovery, ROI modeling, technology selection, and roadmap design. For organizations starting or scaling their AI journey.",
-                bullets: [
-                  "Use-case prioritization",
-                  "Enterprise architecture",
-                  "Vendor & model evaluation",
-                  "Team enablement",
-                ],
-              },
-              {
-                icon: Layers,
-                title: "Implementation & Integration",
-                desc: "Building agents, RAG systems, and copilots. From prototype to production with evaluations and monitoring.",
-                bullets: [
-                  "Agentic workflows",
-                  "RAG & knowledge retrieval",
-                  "Evals & guardrails",
-                  "CI/CD & observability",
-                ],
-              },
-              {
-                icon: Store,
-                title: "StoreMate AI (Product)",
-                desc: "Turnkey AI assistant for physical stores. Crawl any website, build a knowledge base, deploy a customer-facing chatbot.",
-                bullets: [
-                  "Automated web crawling",
-                  "Menu & price extraction",
-                  "Multilingual chat",
-                  "Self-service setup",
-                ],
-              },
-            ].map((s, i) => (
-              <Card key={i} className="transition-shadow hover:shadow-md">
-                <CardHeader>
-                  <s.icon className="mb-2 h-6 w-6 text-indigo-600" />
-                  <CardTitle>{s.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-slate-600">{s.desc}</p>
-                  <ul className="mt-4 list-disc space-y-1 pl-5 text-sm">
-                    {s.bullets.map((b, j) => (
-                      <li key={j}>{b}</li>
+      <section id="services" className="border-y border-line bg-mist-elevated">
+        <div className="mx-auto max-w-content px-4 py-20 sm:px-6">
+          <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+            {t.services.title}
+          </h2>
+          <p className="mt-3 max-w-2xl text-ink-soft">{t.services.sub}</p>
+
+          <div className="mt-12 grid gap-10 md:grid-cols-3 md:gap-8">
+            {t.services.items.map((s, i) => {
+              const Icon = [Brain, Layers, Store][i];
+              return (
+                <article key={s.title} className="border-t border-ink/15 pt-6">
+                  <Icon className="mb-4 h-6 w-6 text-teal" strokeWidth={1.75} />
+                  <h3 className="font-display text-xl font-semibold">{s.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                    {s.desc}
+                  </p>
+                  <ul className="mt-5 space-y-2 text-sm text-ink">
+                    {s.bullets.map((b) => (
+                      <li key={b} className="flex gap-2">
+                        <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-teal" />
+                        {b}
+                      </li>
                     ))}
                   </ul>
-                </CardContent>
-              </Card>
-            ))}
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ── ENTERPRISE CASE STUDY ── */}
-      <section id="work" className="mx-auto max-w-7xl px-4 py-16">
-        <h2 className="text-2xl font-bold md:text-4xl">Current work</h2>
-        <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          <Card className="border-indigo-100 bg-indigo-50/30 shadow-md">
-            <CardHeader>
-              <div className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">
-                Enterprise Engagement
+      {/* ── WORK ── */}
+      <section id="work" className="mx-auto max-w-content px-4 py-20 sm:px-6">
+        <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+          {t.work.title}
+        </h2>
+
+        <div className="mt-10 grid gap-8 lg:grid-cols-12">
+          <article className="border border-line bg-teal-soft/40 p-6 sm:p-8 lg:col-span-7">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal-deep">
+              {t.work.enterpriseTag}
+            </p>
+            <h3 className="mt-3 font-display text-2xl font-semibold leading-snug">
+              {t.work.enterpriseTitle}
+            </h3>
+            <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+              {t.work.enterpriseDesc}
+            </p>
+            <dl className="mt-6 space-y-4 text-sm">
+              {[
+                [t.work.role, t.work.roleValue],
+                [t.work.scope, t.work.scopeValue],
+                [t.work.deliverables, t.work.deliverablesValue],
+              ].map(([label, value]) => (
+                <div key={label}>
+                  <dt className="font-semibold text-ink">{label}</dt>
+                  <dd className="mt-1 text-ink-soft">{value}</dd>
+                </div>
+              ))}
+            </dl>
+          </article>
+
+          <div className="flex flex-col gap-6 lg:col-span-5">
+            <article className="border border-line bg-white/60 p-6">
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-display text-xl font-semibold">
+                  {t.work.storemateTitle}
+                </h3>
+                <a
+                  href="#storemate"
+                  className="text-sm font-medium text-teal-deep hover:underline"
+                >
+                  {t.work.details}
+                </a>
               </div>
-              <CardTitle className="text-xl">
-                Leading AI Transformation for a Global Engineering Enterprise
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-sm text-slate-600">
-                Designing and leading the implementation of the entire corporate
-                AI approach for a multinational engineering company with
-                operations across 50+ countries.
+              <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                {t.work.storemateDesc}
               </p>
-              <div className="mt-5 space-y-3">
-                {[
-                  {
-                    label: "Role",
-                    value:
-                      "AI Strategy Lead (via consulting engagement)",
-                  },
-                  {
-                    label: "Scope",
-                    value:
-                      "Enterprise-wide AI architecture, agent framework selection, use-case prioritization across business units",
-                  },
-                  {
-                    label: "Deliverables",
-                    value:
-                      "Corporate AI strategy, reference architecture, pilot implementations, team enablement program",
-                  },
-                ].map((item, i) => (
-                  <div key={i} className="text-sm">
-                    <span className="font-semibold text-slate-900">
-                      {item.label}:
-                    </span>{" "}
-                    <span className="text-slate-600">{item.value}</span>
-                  </div>
+            </article>
+
+            <article className="border border-line bg-white/60 p-6">
+              <h3 className="font-display text-xl font-semibold">
+                {t.work.previousTitle}
+              </h3>
+              <ul className="mt-4 space-y-4">
+                {t.work.previous.map((item) => (
+                  <li key={item.title} className="flex gap-3 text-sm">
+                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal" />
+                    <span>
+                      <strong className="font-semibold text-ink">
+                        {item.title}
+                      </strong>
+                      <span className="text-ink-soft"> — {item.desc}</span>
+                    </span>
+                  </li>
                 ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <div className="flex flex-col gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <span>StoreMate AI</span>
-                  <a
-                    href="#storemate"
-                    className="inline-flex items-center gap-1 text-sm text-indigo-600"
-                  >
-                    Details <ExternalLink className="h-3 w-3" />
-                  </a>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-600">
-                  Our own product: AI assistant for restaurants, cafes, and
-                  retail stores. Automated crawling, knowledge base generation,
-                  and multilingual customer chat.
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Previous Work</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-3 text-sm text-slate-600">
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-600" />
-                    <span>
-                      <strong>Transfer Service Copilot</strong> &mdash; Lead
-                      triage &amp; itinerary builder. 60% faster response, 18%
-                      conversion lift.
-                    </span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 text-green-600" />
-                    <span>
-                      <strong>B2B SaaS Knowledge RAG</strong> &mdash; Unified
-                      product docs + support tickets. Search time: minutes to
-                      seconds.
-                    </span>
-                  </li>
-                </ul>
-              </CardContent>
-            </Card>
+              </ul>
+            </article>
           </div>
         </div>
       </section>
 
-      {/* ── STOREMATE AI ── */}
-      <section
-        id="storemate"
-        className="border-y border-slate-200 bg-white"
-      >
-        <div className="mx-auto max-w-7xl px-4 py-16">
-          <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">
-                <Store className="h-3.5 w-3.5" /> Product
-              </div>
-              <h2 className="text-2xl font-bold md:text-4xl">
-                StoreMate AI
-              </h2>
-              <p className="mt-3 text-lg text-slate-600">
-                An AI customer assistant for restaurants, cafes, and retail
-                stores. Paste a URL, get a fully trained chatbot in minutes.
-              </p>
-              <div className="mt-6 space-y-4">
-                {[
-                  {
-                    icon: Search,
-                    title: "Automated Crawling",
-                    desc: "Scans the store's website, finds PDF menus, extracts every item with prices.",
-                  },
-                  {
-                    icon: Brain,
-                    title: "Knowledge Base Generation",
-                    desc: "Structures everything into a clean KB: menu, hours, location, reviews, FAQs.",
-                  },
-                  {
-                    icon: Bot,
-                    title: "Multilingual Chat",
-                    desc: "Customers chat in any language. The AI answers from the KB only -- no hallucinations.",
-                  },
-                ].map((f, i) => (
-                  <div key={i} className="flex gap-3">
-                    <f.icon className="mt-1 h-5 w-5 shrink-0 text-indigo-600" />
+      {/* ── STOREMATE ── */}
+      <section id="storemate" className="border-y border-line section-wash">
+        <div className="mx-auto grid max-w-content items-start gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2">
+          <div>
+            <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em] text-teal-deep">
+              <Store className="h-3.5 w-3.5" />
+              {t.storemate.badge}
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-bold tracking-tight md:text-4xl">
+              {t.storemate.title}
+            </h2>
+            <p className="mt-4 text-lg leading-relaxed text-ink-soft">
+              {t.storemate.sub}
+            </p>
+
+            <div className="mt-8 space-y-6">
+              {t.storemate.features.map((f, i) => {
+                const Icon = [Search, Brain, Bot][i];
+                return (
+                  <div key={f.title} className="flex gap-4">
+                    <Icon className="mt-0.5 h-5 w-5 shrink-0 text-teal" />
                     <div>
-                      <div className="text-sm font-semibold">{f.title}</div>
-                      <div className="text-sm text-slate-600">{f.desc}</div>
+                      <h3 className="font-semibold">{f.title}</h3>
+                      <p className="mt-1 text-sm text-ink-soft">{f.desc}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-              <div className="mt-8">
-                <Button asChild size="lg" className="rounded-2xl">
-                  <a href="#contact">
-                    Request a demo
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-              </div>
+                );
+              })}
             </div>
-            <div className="relative">
-              <div className="absolute -inset-4 rounded-3xl bg-indigo-100/40 blur-2xl" />
-              <Card className="relative shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-base">How it works</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[
-                      {
-                        step: "1",
-                        label: "Paste URL",
-                        desc: "Enter any store website. Add extra PDF links if needed.",
-                      },
-                      {
-                        step: "2",
-                        label: "Crawl & Extract",
-                        desc: "AI discovers pages, PDFs, menus. Extracts every item, price, and detail.",
-                      },
-                      {
-                        step: "3",
-                        label: "Review KB",
-                        desc: "See the structured knowledge base. Edit, add missing info, re-index.",
-                      },
-                      {
-                        step: "4",
-                        label: "Chat",
-                        desc: "Customers ask questions. The AI answers from the KB in any language.",
-                      },
-                    ].map((s, i) => (
-                      <div key={i} className="flex gap-3">
-                        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-indigo-600 text-xs font-bold text-white">
-                          {s.step}
-                        </div>
-                        <div>
-                          <div className="text-sm font-semibold">
-                            {s.label}
-                          </div>
-                          <div className="text-xs text-slate-500">
-                            {s.desc}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+
+            <div className="mt-10">
+              <Button asChild size="lg" className="rounded-sm">
+                <a href="#contact">
+                  {t.storemate.cta}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+            </div>
+          </div>
+
+          <div className="border border-line bg-white/70 p-6 sm:p-8">
+            <h3 className="font-display text-lg font-semibold">
+              {t.storemate.howTitle}
+            </h3>
+            <ol className="mt-6 space-y-5">
+              {t.storemate.steps.map((s, i) => (
+                <li key={s.label} className="flex gap-4">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center bg-teal font-display text-sm font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <div className="font-semibold">{s.label}</div>
+                    <p className="mt-1 text-sm text-ink-soft">{s.desc}</p>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
+                </li>
+              ))}
+            </ol>
           </div>
         </div>
       </section>
 
       {/* ── APPROACH ── */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <h2 className="text-2xl font-bold md:text-4xl">How we work</h2>
-        <div className="mt-8 grid gap-6 lg:grid-cols-4">
-          {[
-            {
-              step: "1",
-              title: "Discovery",
-              desc: "Map your pains, data landscape, and quick wins. Define measurable outcomes.",
-            },
-            {
-              step: "2",
-              title: "Design",
-              desc: "Architecture, guardrails, evaluation plan. Security and compliance from day one.",
-            },
-            {
-              step: "3",
-              title: "Build",
-              desc: "Prototype in days, iterate to production with evals and monitoring.",
-            },
-            {
-              step: "4",
-              title: "Scale",
-              desc: "Handover, team enablement, and roadmap to expand ROI across the organization.",
-            },
-          ].map((a, i) => (
-            <Card key={i} className="relative">
-              <CardHeader>
-                <div className="font-semibold text-indigo-600">
-                  Step {a.step}
-                </div>
-                <CardTitle>{a.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-600">{a.desc}</p>
-              </CardContent>
-            </Card>
+      <section className="mx-auto max-w-content px-4 py-20 sm:px-6">
+        <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+          {t.approach.title}
+        </h2>
+        <div className="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {t.approach.steps.map((a, i) => (
+            <article key={a.title} className="border-t border-ink/15 pt-5">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-teal">
+                0{i + 1}
+              </p>
+              <h3 className="mt-2 font-display text-xl font-semibold">
+                {a.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-ink-soft">
+                {a.desc}
+              </p>
+            </article>
           ))}
         </div>
       </section>
 
       {/* ── ABOUT ── */}
-      <section
-        id="about"
-        className="border-y border-slate-200 bg-white"
-      >
-        <div className="mx-auto max-w-7xl px-4 py-16">
-          <h2 className="text-2xl font-bold md:text-4xl">About</h2>
-          <div className="mt-8 grid items-start gap-6 lg:grid-cols-3">
-            <div className="space-y-4 text-slate-700 lg:col-span-2">
-              <p>
-                Gradient Logic is a boutique AI consultancy led by{" "}
-                <strong>Pavlos Polydoras</strong>, based in Athens. We combine
-                hands-on engineering with strategic advisory to ship AI systems
-                that create real business value &mdash; not just impressive
-                demos.
-              </p>
-              <p>
-                Currently serving as AI Strategy Lead for a global engineering
-                enterprise, designing and implementing their corporate-wide AI
-                approach across multiple business units and geographies.
-              </p>
-              <ul className="list-disc space-y-2 pl-5 text-sm">
-                <li>
-                  Deep experience with RAG, agentic workflows, and LLM
-                  evaluations
-                </li>
-                <li>
-                  Production systems with Claude, GPT-4, and open-source models
-                </li>
-                <li>
-                  Privacy-first architectures aligned with GDPR best practices
-                </li>
-                <li>
-                  Full-stack: Next.js, Python, TypeScript, Postgres, vector
-                  databases
-                </li>
-              </ul>
+      <section id="about" className="border-y border-line bg-mist-elevated">
+        <div className="mx-auto grid max-w-content gap-10 px-4 py-20 sm:px-6 lg:grid-cols-12">
+          <div className="lg:col-span-7">
+            <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+              {t.about.title}
+            </h2>
+            <div className="mt-6 space-y-4 text-ink-soft leading-relaxed">
+              <p>{t.about.p1}</p>
+              <p>{t.about.p2}</p>
             </div>
-            <Card>
-              <CardHeader>
-                <CardTitle>Tech we work with</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm text-slate-600">
-                <p>
-                  <strong>LLMs:</strong> Claude, GPT-4, Gemini, open-source
-                </p>
-                <p>
-                  <strong>Frameworks:</strong> LangChain, LlamaIndex, MCP,
-                  custom agents
-                </p>
-                <p>
-                  <strong>Infra:</strong> Next.js, Python, Postgres, ChromaDB,
-                  Pinecone
-                </p>
-                <p>
-                  <strong>Platforms:</strong> Vercel, Cloudflare, AWS, on-prem
-                </p>
-              </CardContent>
-            </Card>
+            <ul className="mt-6 space-y-2 text-sm text-ink">
+              {t.about.bullets.map((b) => (
+                <li key={b} className="flex gap-2">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-teal" />
+                  {b}
+                </li>
+              ))}
+            </ul>
           </div>
+
+          <aside className="border border-line bg-white/70 p-6 lg:col-span-5">
+            <h3 className="font-display text-lg font-semibold">
+              {t.about.techTitle}
+            </h3>
+            <dl className="mt-5 space-y-4 text-sm">
+              {t.about.tech.map((row) => (
+                <div key={row.label}>
+                  <dt className="font-semibold text-ink">{row.label}</dt>
+                  <dd className="mt-1 text-ink-soft">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
         </div>
       </section>
 
       {/* ── CONTACT ── */}
-      <section id="contact">
-        <div className="mx-auto max-w-7xl px-4 py-16">
-          <h2 className="text-2xl font-bold md:text-4xl">Let&apos;s talk</h2>
-          <p className="mt-2 text-slate-600">
-            Tell us about your goals and we&apos;ll suggest a focused starting
-            point.
-          </p>
-          <div className="mt-8 grid gap-6 lg:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Get in touch</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 text-sm">
-                <p className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-indigo-600" />
-                  <a className="underline" href={`mailto:${EMAIL}`}>
-                    {EMAIL}
-                  </a>
-                </p>
-                <p className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-indigo-600" />
+      <section id="contact" className="mx-auto max-w-content px-4 py-20 sm:px-6">
+        <h2 className="font-display text-3xl font-bold tracking-tight md:text-4xl">
+          {t.contact.title}
+        </h2>
+        <p className="mt-3 max-w-xl text-ink-soft">{t.contact.sub}</p>
+
+        <div className="mt-10 grid gap-8 lg:grid-cols-2">
+          <div className="border border-line bg-teal-soft/35 p-6 sm:p-8">
+            <h3 className="font-display text-xl font-semibold">
+              {t.contact.getInTouch}
+            </h3>
+            <ul className="mt-6 space-y-4 text-sm">
+              {hasPhone && (
+                <li>
                   <a
-                    className="underline"
-                    href={CALENDLY}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href={`tel:${SITE.phone}`}
+                    className="group flex items-center gap-3 font-medium text-ink hover:text-teal-deep"
                   >
-                    Book a 30-minute call
+                    <Phone className="h-4 w-4 text-teal" />
+                    <span>
+                      <span className="block text-xs uppercase tracking-wide text-muted">
+                        {t.contact.callUs}
+                      </span>
+                      {SITE.phone}
+                    </span>
                   </a>
-                </p>
-                <p className="flex items-center gap-2">
-                  <Linkedin className="h-4 w-4 text-indigo-600" />
-                  <a
-                    className="underline"
-                    href="https://www.linkedin.com/in/pavlospolydoras/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    LinkedIn
-                  </a>
-                </p>
-                <p className="flex items-center gap-2">
-                  <Github className="h-4 w-4 text-indigo-600" />
-                  <a
-                    className="underline"
-                    href="https://github.com/gradient-logic"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    GitHub
-                  </a>
-                </p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Good fit if you need</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="list-disc space-y-2 pl-5 text-sm text-slate-700">
-                  <li>
-                    AI strategy for your organization &mdash; where to start,
-                    what to build
-                  </li>
-                  <li>
-                    Agents, RAG, or copilots built and deployed to production
-                  </li>
-                  <li>
-                    An AI customer assistant for your store, restaurant, or cafe
-                  </li>
-                  <li>
-                    A technical advisor who has shipped real AI systems at
-                    enterprise scale
-                  </li>
-                </ul>
-                <div className="mt-5">
-                  <Button asChild className="w-full rounded-2xl md:w-auto">
-                    <a
-                      href={`mailto:${EMAIL}?subject=Project%20inquiry%20from%20website`}
-                    >
-                      Start a conversation
-                    </a>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </li>
+              )}
+              <li>
+                <a
+                  href={SITE.calendly}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-3 font-medium text-ink hover:text-teal-deep"
+                >
+                  <Calendar className="h-4 w-4 text-teal" />
+                  <span>
+                    <span className="block text-xs uppercase tracking-wide text-muted">
+                      Calendly
+                    </span>
+                    {t.contact.bookCall}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={`mailto:${SITE.email}`}
+                  className="group flex items-center gap-3 font-medium text-ink hover:text-teal-deep"
+                >
+                  <Mail className="h-4 w-4 text-teal" />
+                  <span>
+                    <span className="block text-xs uppercase tracking-wide text-muted">
+                      {t.contact.emailUs}
+                    </span>
+                    {SITE.email}
+                  </span>
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SITE.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-ink hover:text-teal-deep"
+                >
+                  <Linkedin className="h-4 w-4 text-teal" />
+                  LinkedIn
+                </a>
+              </li>
+              <li>
+                <a
+                  href={SITE.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 text-ink hover:text-teal-deep"
+                >
+                  <Github className="h-4 w-4 text-teal" />
+                  GitHub
+                </a>
+              </li>
+            </ul>
+
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Button asChild className="rounded-sm">
+                <a href={SITE.calendly} target="_blank" rel="noopener noreferrer">
+                  {t.hero.ctaPrimary}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </a>
+              </Button>
+              <Button asChild variant="outline" className="rounded-sm">
+                <a
+                  href={`mailto:${SITE.email}?subject=${encodeURIComponent(
+                    locale === "el"
+                      ? "Ενδιαφέρον από το website"
+                      : "Project inquiry from website"
+                  )}`}
+                >
+                  {t.contact.start}
+                </a>
+              </Button>
+            </div>
+          </div>
+
+          <div className="border border-line bg-white/60 p-6 sm:p-8">
+            <h3 className="font-display text-xl font-semibold">
+              {t.contact.goodFit}
+            </h3>
+            <ul className="mt-5 space-y-3 text-sm text-ink-soft">
+              {t.contact.fits.map((f) => (
+                <li key={f} className="flex gap-3">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-teal" />
+                  {f}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </section>
 
-      {/* ── FOOTER ── */}
-      <footer className="border-t border-slate-200 py-8 text-sm text-slate-500">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 md:flex-row">
-          <div>
-            &copy; {new Date().getFullYear()} Gradient Logic. All rights
-            reserved.
-          </div>
-          <div>Based in Athens &middot; Serving clients globally</div>
+      {/* Mobile sticky CTA */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-mist/95 p-3 backdrop-blur md:hidden">
+        <div className="mx-auto flex max-w-content gap-2">
+          <Button asChild className="flex-1 rounded-sm">
+            <a href={SITE.calendly} target="_blank" rel="noopener noreferrer">
+              {t.hero.ctaPrimary}
+            </a>
+          </Button>
+          {hasPhone ? (
+            <Button asChild variant="outline" className="rounded-sm">
+              <a href={`tel:${SITE.phone}`} aria-label={t.contact.callUs}>
+                <Phone className="h-4 w-4" />
+              </a>
+            </Button>
+          ) : (
+            <Button asChild variant="outline" className="rounded-sm">
+              <a href={`mailto:${SITE.email}`} aria-label={t.contact.emailUs}>
+                <Mail className="h-4 w-4" />
+              </a>
+            </Button>
+          )}
+        </div>
+      </div>
+
+      <footer className="border-t border-line pb-24 pt-8 text-sm text-muted md:pb-8">
+        <div className="mx-auto flex max-w-content flex-col items-start justify-between gap-3 px-4 sm:px-6 md:flex-row md:items-center">
+          <p>
+            © {new Date().getFullYear()} Gradient Logic. {t.footer.rights}
+          </p>
+          <p>{t.footer.serving}</p>
         </div>
       </footer>
     </div>
