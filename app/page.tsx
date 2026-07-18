@@ -13,7 +13,6 @@ import {
   Linkedin,
   Mail,
   Menu,
-  Phone,
   Search,
   Store,
   X,
@@ -46,7 +45,6 @@ export default function GradientLogicPage() {
   const { locale, setLocale, t } = useLocale();
   const [menuOpen, setMenuOpen] = useState(false);
   const reduceMotion = useReducedMotion();
-  const hasPhone = Boolean(SITE.phone);
 
   const nav = [
     { href: "#services", label: t.nav.services },
@@ -194,18 +192,9 @@ export default function GradientLogicPage() {
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </a>
               </Button>
-              {hasPhone ? (
-                <Button asChild size="lg" variant="outline" className="rounded-sm">
-                  <a href={`tel:${SITE.phone}`}>
-                    <Phone className="mr-2 h-4 w-4" />
-                    {t.contact.callUs}
-                  </a>
-                </Button>
-              ) : (
-                <Button asChild size="lg" variant="outline" className="rounded-sm">
-                  <a href="#storemate">{t.hero.ctaSecondary}</a>
-                </Button>
-              )}
+              <Button asChild size="lg" variant="outline" className="rounded-sm">
+                <a href="#storemate">{t.hero.ctaSecondary}</a>
+              </Button>
             </div>
 
             <p className="mt-8 text-sm text-muted">{t.hero.location}</p>
@@ -450,22 +439,6 @@ export default function GradientLogicPage() {
               {t.contact.getInTouch}
             </h3>
             <ul className="mt-6 space-y-4 text-sm">
-              {hasPhone && (
-                <li>
-                  <a
-                    href={`tel:${SITE.phone}`}
-                    className="group flex items-center gap-3 font-medium text-ink hover:text-teal-deep"
-                  >
-                    <Phone className="h-4 w-4 text-teal" />
-                    <span>
-                      <span className="block text-xs uppercase tracking-wide text-muted">
-                        {t.contact.callUs}
-                      </span>
-                      {SITE.phone}
-                    </span>
-                  </a>
-                </li>
-              )}
               <li>
                 <a
                   href={SITE.calendly}
@@ -565,19 +538,11 @@ export default function GradientLogicPage() {
               {t.hero.ctaPrimary}
             </a>
           </Button>
-          {hasPhone ? (
-            <Button asChild variant="outline" className="rounded-sm">
-              <a href={`tel:${SITE.phone}`} aria-label={t.contact.callUs}>
-                <Phone className="h-4 w-4" />
-              </a>
-            </Button>
-          ) : (
-            <Button asChild variant="outline" className="rounded-sm">
-              <a href={`mailto:${SITE.email}`} aria-label={t.contact.emailUs}>
-                <Mail className="h-4 w-4" />
-              </a>
-            </Button>
-          )}
+          <Button asChild variant="outline" className="rounded-sm">
+            <a href={`mailto:${SITE.email}`} aria-label={t.contact.emailUs}>
+              <Mail className="h-4 w-4" />
+            </a>
+          </Button>
         </div>
       </div>
 

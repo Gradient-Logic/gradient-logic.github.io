@@ -6,8 +6,6 @@ export const SITE = {
   calendly: "https://calendly.com/hello-gradient-logic/30min",
   linkedin: "https://www.linkedin.com/in/pavlospolydoras/",
   github: "https://github.com/gradient-logic",
-  /** Add your public business number for click-to-call (E.164), e.g. +3069XXXXXXXX */
-  phone: "" as string,
   location: { el: "Αθήνα", en: "Athens" },
 } as const;
 
@@ -189,7 +187,6 @@ export const copy = {
       sub: "Πείτε μας τους στόχους σας — θα προτείνουμε ένα ξεκάθαρο πρώτο βήμα.",
       getInTouch: "Επικοινωνία",
       bookCall: "Κλείστε κλήση 30 λεπτών",
-      callUs: "Καλέστε μας",
       emailUs: "Στείλτε email",
       goodFit: "Καλή εφαρμογή αν χρειάζεστε",
       fits: [
@@ -382,7 +379,6 @@ export const copy = {
       sub: "Tell us about your goals and we'll suggest a focused starting point.",
       getInTouch: "Get in touch",
       bookCall: "Book a 30-minute call",
-      callUs: "Call us",
       emailUs: "Email us",
       goodFit: "Good fit if you need",
       fits: [
