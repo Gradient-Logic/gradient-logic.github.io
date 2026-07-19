@@ -2,7 +2,6 @@ import { useState } from "react";
 import { ApproachPath } from "@/components/ApproachPath";
 import { Analytics } from "@/components/Analytics";
 import { HeroBackground } from "@/components/HeroBackground";
-import { JsonLd } from "@/components/JsonLd";
 import { MetricCountUp } from "@/components/MetricCountUp";
 import { MotionRoot } from "@/components/MotionRoot";
 import { StoreMateSequence } from "@/components/StoreMateSequence";
@@ -28,7 +27,6 @@ export default function App() {
       <a className="skip-link" href="#home">
         Skip to content
       </a>
-      <JsonLd />
       <Analytics />
       <header className="site-header">
         <div className="shell site-header__inner">

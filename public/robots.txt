@@ -1,4 +1,7 @@
 User-agent: *
 Allow: /
 
+# Optional LLM context file
+# https://gradient-logic.com/llms.txt
+
 Sitemap: https://gradient-logic.com/sitemap.xml
