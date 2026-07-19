@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gradient-logic.com/sitemap.xml

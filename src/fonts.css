@@ -1,0 +1,41 @@
+@import "@fontsource/space-grotesk/latin-400.css";
+@import "@fontsource/space-grotesk/latin-500.css";
+@import "@fontsource/space-grotesk/latin-600.css";
+@import "@fontsource/space-grotesk/latin-700.css";
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/greek-400.css";
+@import "@fontsource/inter/greek-500.css";
+@import "@fontsource/inter/greek-600.css";
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
+
+:root {
+  --ink: #0a0e14;
+  --surface: #111722;
+  --line: #26303f;
+  --text: #e8edf4;
+  --text-dim: #8a96a8;
+  --signal: #4fd1b0;
+  --signal-dim: rgba(79, 209, 176, 0.14);
+  --heat: #2b2e6e;
+
+  --font-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 6rem;
+
+  --content: 72rem;
+  --radius: 2px;
+  --header-h: 3.75rem;
+}

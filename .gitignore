@@ -1,11 +1,11 @@
 # dependencies
 node_modules/
 
-# next/build
-.next/
-out/            # build output (Actions uploads this as artifact)
-.next.static/
+# build
 dist/
+.next/
+out/
+.vite/
 
 # env & local
 .env
@@ -20,4 +20,3 @@ coverage/
 # OS/editor
 .DS_Store
 *.log
-/out
