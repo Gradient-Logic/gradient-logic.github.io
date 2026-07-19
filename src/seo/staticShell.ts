@@ -49,7 +49,10 @@ export function buildStaticShell(): string {
   const approach = t.approach.steps
     .map(
       (s) =>
-        `<li><strong>${esc(s.title)}</strong>: ${esc(s.desc)}</li>`
+        `<li><strong>${esc(s.title)}</strong>: ${esc(s.desc)}
+        <p><em>${esc(t.approach.outputLabel)}:</em> ${esc(s.output)}</p>
+        <ul>${s.focus.map((f) => `<li>${esc(f)}</li>`).join("")}</ul>
+        </li>`
     )
     .join("");
   const aboutBullets = t.about.bullets

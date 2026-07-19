@@ -281,7 +281,7 @@ export default function App() {
           aria-labelledby="approach-title"
         >
           <div className="shell">
-            <ApproachPath title={t.approach.title} steps={t.approach.steps} />
+            <ApproachPath approach={t.approach} />
           </div>
         </section>
 
