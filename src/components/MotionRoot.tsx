@@ -15,7 +15,7 @@ import { WebGLProvider } from "@/webgl/WebGLContext";
 
 const SharedCanvas = lazy(() => import("@/scenes/SharedCanvas"));
 
-/** Boots Lenis, reveals, progress rail, and lazy shared WebGL. */
+/** Boots Lenis, reveals, progress rail and lazy shared WebGL. */
 export function MotionRoot({ children }: { children: ReactNode }) {
   const reducedMotion = usePrefersReducedMotion();
   useSmoothScroll(reducedMotion);

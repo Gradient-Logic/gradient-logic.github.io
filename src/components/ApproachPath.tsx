@@ -94,7 +94,7 @@ export function ApproachPath({ title, steps }: ApproachPathProps) {
   return (
     <div className="approach" ref={rootRef}>
       <div className="section-head" data-reveal>
-        <p className="eyebrow">/03 — approach</p>
+        <p className="eyebrow">/03 · approach</p>
         <h2 id="approach-title">{title}</h2>
       </div>
 

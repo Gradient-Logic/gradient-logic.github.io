@@ -22,7 +22,7 @@ export const copy = {
     hero: {
       brand: "Gradient Logic",
       headline: "Σχεδιάζουμε και χτίζουμε συστήματα AI που πραγματικά φτάνουν σε παραγωγή.",
-      sub: "Από στρατηγική AI σε επιχειρήσεις μέχρι έτοιμα προϊόντα. Από την ιδέα στο deployed σύστημα — σε εβδομάδες, όχι σε τρίμηνα.",
+      sub: "Από στρατηγική AI σε επιχειρήσεις μέχρι έτοιμα προϊόντα. Από την ιδέα στο deployed σύστημα σε εβδομάδες, όχι σε τρίμηνα.",
       ctaPrimary: "Κλείστε κλήση",
       ctaSecondary: "Δείτε το StoreMate AI",
       location:
@@ -32,9 +32,9 @@ export const copy = {
       title: "Τι φέρνουμε",
       items: [
         "Στρατηγική & αρχιτεκτονική AI για οργανισμούς που κλιμακώνουν",
-        "Agents, RAG και copilots μέχρι production — με evals και monitoring",
+        "Agents, RAG και copilots μέχρι production με evals και monitoring",
         "Security-first: GDPR, guardrails, governance και access control",
-        "StoreMate AI — έτοιμος βοηθός για φυσικά καταστήματα",
+        "StoreMate AI: έτοιμος βοηθός για φυσικά καταστήματα",
       ],
     },
     services: {
@@ -75,12 +75,12 @@ export const copy = {
     },
     work: {
       title: "Τρέχουσα δουλειά",
-      eyebrow: "/01 — work",
+      eyebrow: "/01 · work",
       enterpriseTag: "Enterprise Engagement",
       enterpriseTitle:
         "AI Transformation για παγκόσμια engineering επιχείρηση",
       enterpriseDesc:
-        "Σχεδιασμός και υλοποίηση της εταιρικής AI προσέγγισης για πολυεθνική με παρουσία σε 50+ χώρες — από strategy και reference architecture έως agent platforms, MCP, RAG και governance.",
+        "Σχεδιασμός και υλοποίηση της εταιρικής AI προσέγγισης για πολυεθνική με παρουσία σε 50+ χώρες: από strategy και reference architecture έως agent platforms, MCP, RAG και governance.",
       role: "Ρόλος",
       roleValue: "AI Strategy Lead (via consulting engagement)",
       scope: "Scope",
@@ -97,7 +97,7 @@ export const copy = {
       previous: [
         {
           title: "Wholesale operations intelligence",
-          desc: "Dashboards πωλήσεων & αποθεμάτων πάνω σε ERP δεδομένα — από CSV/API sync σε actionable KPIs για τη διοίκηση.",
+          desc: "Dashboards πωλήσεων & αποθεμάτων πάνω σε ERP δεδομένα: από CSV/API sync σε actionable KPIs για τη διοίκηση.",
         },
         {
           title: "Industrial technical knowledge assistant",
@@ -105,7 +105,7 @@ export const copy = {
         },
         {
           title: "B2B commerce sales assistant",
-          desc: "Βοηθός πωλήσεων για χονδρική: κατανόηση SKU, διαθεσιμότητα, συστάσεις προϊόντων — GR + EN.",
+          desc: "Βοηθός πωλήσεων για χονδρική: κατανόηση SKU, διαθεσιμότητα, συστάσεις προϊόντων (GR + EN).",
         },
         {
           title: "Transfer Service Copilot",
@@ -120,7 +120,7 @@ export const copy = {
     storemate: {
       badge: "Προϊόν",
       title: "StoreMate AI",
-      sub: "AI βοηθός πελατών για εστιατόρια, καφέ και retail. Βάλτε ένα URL — έτοιμο chatbot σε λίγα λεπτά.",
+      sub: "AI βοηθός πελατών για εστιατόρια, καφέ και retail. Βάλτε ένα URL. Έτοιμο chatbot σε λίγα λεπτά.",
       features: [
         {
           title: "Αυτόματο Crawling",
@@ -132,7 +132,7 @@ export const copy = {
         },
         {
           title: "Πολύγλωσσο Chat",
-          desc: "Οι πελάτες ρωτούν σε οποιαδήποτε γλώσσα. Απαντήσεις μόνο από το KB — χωρίς hallucinations.",
+          desc: "Οι πελάτες ρωτούν σε οποιαδήποτε γλώσσα. Απαντήσεις μόνο από το KB, χωρίς hallucinations.",
         },
       ],
       cta: "Ζητήστε demo",
@@ -179,8 +179,8 @@ export const copy = {
     },
     about: {
       title: "Σχετικά",
-      p1: "Η Gradient Logic είναι boutique AI consultancy με επικεφαλής τον Pavlos Polydoras, με βάση την Αθήνα. Συνδυάζουμε hands-on engineering με στρατηγική συμβουλευτική για να παραδίδουμε συστήματα AI με πραγματική επιχειρηματική αξία — όχι απλώς εντυπωσιακά demos.",
-      p2: "Αυτή τη στιγμή υπηρετούμε ως AI Strategy Lead για παγκόσμια engineering επιχείρηση, σχεδιάζοντας και υλοποιώντας την εταιρική AI προσέγγιση σε πολλά business units και γεωγραφίες — συμπεριλαμβανομένων agent platforms, MCP servers, knowledge systems και governance.",
+      p1: "Η Gradient Logic είναι boutique AI consultancy με επικεφαλής τον Pavlos Polydoras, με βάση την Αθήνα. Συνδυάζουμε hands-on engineering με στρατηγική συμβουλευτική για να παραδίδουμε συστήματα AI με πραγματική επιχειρηματική αξία, όχι απλώς εντυπωσιακά demos.",
+      p2: "Αυτή τη στιγμή υπηρετούμε ως AI Strategy Lead για παγκόσμια engineering επιχείρηση, σχεδιάζοντας και υλοποιώντας την εταιρική AI προσέγγιση σε πολλά business units και γεωγραφίες, συμπεριλαμβανομένων agent platforms, MCP servers, knowledge systems και governance.",
       bullets: [
         "Βαθιά εμπειρία σε RAG, agentic workflows, MCP και LLM evaluations",
         "Production συστήματα με Claude, GPT-5.6, Gemini και open-source μοντέλα",
@@ -210,13 +210,13 @@ export const copy = {
     },
     contact: {
       title: "Ας μιλήσουμε",
-      sub: "Πείτε μας τους στόχους σας — θα προτείνουμε ένα ξεκάθαρο πρώτο βήμα.",
+      sub: "Πείτε μας τους στόχους σας. Θα προτείνουμε ένα ξεκάθαρο πρώτο βήμα.",
       getInTouch: "Επικοινωνία",
       bookCall: "Κλείστε κλήση 30 λεπτών",
       emailUs: "Στείλτε email",
       goodFit: "Καλή εφαρμογή αν χρειάζεστε",
       fits: [
-        "AI strategy για τον οργανισμό σας — από πού να ξεκινήσετε",
+        "AI strategy για τον οργανισμό σας: από πού να ξεκινήσετε",
         "Agents, RAG, MCP ή copilots σε production",
         "AI βοηθό πελατών για κατάστημα, εστιατόριο ή καφέ",
         "Τεχνικό σύμβουλο που έχει παραδώσει πραγματικά AI συστήματα σε enterprise κλίμακα",
@@ -240,7 +240,7 @@ export const copy = {
     hero: {
       brand: "Gradient Logic",
       headline: "We design and build AI systems that actually ship.",
-      sub: "From enterprise AI strategy to production-ready products. Idea to deployed AI — in weeks, not quarters.",
+      sub: "From enterprise AI strategy to production-ready products. Idea to deployed AI in weeks, not quarters.",
       ctaPrimary: "Book a call",
       ctaSecondary: "See StoreMate AI",
       location:
@@ -250,18 +250,18 @@ export const copy = {
       title: "What we bring",
       items: [
         "AI strategy & architecture for organizations scaling beyond pilots",
-        "Agents, RAG, and copilots to production — with evals and monitoring",
-        "Security-first: GDPR, guardrails, governance, and access control",
-        "StoreMate AI — a turnkey assistant for physical stores",
+        "Agents, RAG and copilots to production with evals and monitoring",
+        "Security-first: GDPR, guardrails, governance and access control",
+        "StoreMate AI: a turnkey assistant for physical stores",
       ],
     },
     services: {
       title: "What we do",
-      sub: "Two modes: hands-on consulting for enterprises, and a turnkey product for brick-and-mortar stores.",
+      sub: "Two modes: hands-on consulting for enterprises and a turnkey product for brick-and-mortar stores.",
       items: [
         {
           title: "AI Strategy & Architecture",
-          desc: "Use-case discovery, ROI modeling, technology selection, and roadmap design. For organizations starting or scaling their AI journey.",
+          desc: "Use-case discovery, ROI modeling, technology selection and roadmap design. For organizations starting or scaling their AI journey.",
           bullets: [
             "Use-case prioritization",
             "Enterprise architecture",
@@ -271,7 +271,7 @@ export const copy = {
         },
         {
           title: "Implementation & Integration",
-          desc: "Building agents, RAG systems, MCP tooling, and copilots. From prototype to production with evaluations, security, and monitoring.",
+          desc: "Building agents, RAG systems, MCP tooling and copilots. From prototype to production with evaluations, security and monitoring.",
           bullets: [
             "Agentic workflows & MCP servers",
             "RAG & knowledge platforms",
@@ -293,12 +293,12 @@ export const copy = {
     },
     work: {
       title: "Current work",
-      eyebrow: "/01 — work",
+      eyebrow: "/01 · work",
       enterpriseTag: "Enterprise Engagement",
       enterpriseTitle:
         "Leading AI transformation for a global engineering enterprise",
       enterpriseDesc:
-        "Designing and leading the corporate AI approach for a multinational engineering company with operations across 50+ countries — from strategy and reference architecture through agent platforms, MCP, RAG, and governance.",
+        "Designing and leading the corporate AI approach for a multinational engineering company with operations across 50+ countries: from strategy and reference architecture through agent platforms, MCP, RAG and governance.",
       role: "Role",
       roleValue: "AI Strategy Lead (via consulting engagement)",
       scope: "Scope",
@@ -309,21 +309,21 @@ export const copy = {
         "Corporate AI strategy, reference architecture, pilot implementations, knowledge platforms, team enablement program",
       storemateTitle: "StoreMate AI",
       storemateDesc:
-        "Our product: AI assistant for restaurants, cafes, and retail. Automated crawling, knowledge base, and multilingual customer chat.",
+        "Our product: AI assistant for restaurants, cafes and retail. Automated crawling, knowledge base and multilingual customer chat.",
       details: "Details",
       previousTitle: "Selected work",
       previous: [
         {
           title: "Wholesale operations intelligence",
-          desc: "Sales & inventory dashboards on ERP data — CSV/API sync to actionable KPIs for leadership.",
+          desc: "Sales & inventory dashboards on ERP data: CSV/API sync to actionable KPIs for leadership.",
         },
         {
           title: "Industrial technical knowledge assistant",
-          desc: "RAG over a private technical library (PDFs, diagrams) with RBAC, citations, and an audit trail.",
+          desc: "RAG over a private technical library (PDFs, diagrams) with RBAC, citations and an audit trail.",
         },
         {
           title: "B2B commerce sales assistant",
-          desc: "Wholesale sales assistant: SKU understanding, availability, product recommendations — GR + EN.",
+          desc: "Wholesale sales assistant: SKU understanding, availability, product recommendations (GR + EN).",
         },
         {
           title: "Transfer Service Copilot",
@@ -338,7 +338,7 @@ export const copy = {
     storemate: {
       badge: "Product",
       title: "StoreMate AI",
-      sub: "An AI customer assistant for restaurants, cafes, and retail. Paste a URL, get a trained chatbot in minutes.",
+      sub: "An AI customer assistant for restaurants, cafes and retail. Paste a URL, get a trained chatbot in minutes.",
       features: [
         {
           title: "Automated Crawling",
@@ -350,7 +350,7 @@ export const copy = {
         },
         {
           title: "Multilingual Chat",
-          desc: "Customers chat in any language. Answers from the KB only — no hallucinations.",
+          desc: "Customers chat in any language. Answers from the KB only, with no hallucinations.",
         },
       ],
       cta: "Request a demo",
@@ -362,7 +362,7 @@ export const copy = {
         },
         {
           label: "Crawl & Extract",
-          desc: "AI discovers pages, PDFs, menus. Extracts every item, price, and detail.",
+          desc: "AI discovers pages, PDFs, menus. Extracts every item, price and detail.",
         },
         {
           label: "Review KB",
@@ -379,7 +379,7 @@ export const copy = {
       steps: [
         {
           title: "Discovery",
-          desc: "Map your pains, data landscape, and quick wins. Define measurable outcomes.",
+          desc: "Map your pains, data landscape and quick wins. Define measurable outcomes.",
         },
         {
           title: "Design",
@@ -391,17 +391,17 @@ export const copy = {
         },
         {
           title: "Scale",
-          desc: "Handover, team enablement, and roadmap to expand ROI across the organization.",
+          desc: "Handover, team enablement and roadmap to expand ROI across the organization.",
         },
       ],
     },
     about: {
       title: "About",
-      p1: "Gradient Logic is a boutique AI consultancy led by Pavlos Polydoras, based in Athens. We combine hands-on engineering with strategic advisory to ship AI systems that create real business value — not just impressive demos.",
-      p2: "Currently serving as AI Strategy Lead for a global engineering enterprise, designing and implementing their corporate-wide AI approach across multiple business units and geographies — including agent platforms, MCP servers, knowledge systems, and governance.",
+      p1: "Gradient Logic is a boutique AI consultancy led by Pavlos Polydoras, based in Athens. We combine hands-on engineering with strategic advisory to ship AI systems that create real business value, not just impressive demos.",
+      p2: "Currently serving as AI Strategy Lead for a global engineering enterprise, designing and implementing their corporate-wide AI approach across multiple business units and geographies, including agent platforms, MCP servers, knowledge systems and governance.",
       bullets: [
-        "Deep experience with RAG, agentic workflows, MCP, and LLM evaluations",
-        "Production systems with Claude, GPT-5.6, Gemini, and open-source models",
+        "Deep experience with RAG, agentic workflows, MCP and LLM evaluations",
+        "Production systems with Claude, GPT-5.6, Gemini and open-source models",
         "Privacy-first architectures aligned with GDPR best practices",
         "Full-stack: Next.js, Python, TypeScript, Postgres, vector databases",
       ],
@@ -434,7 +434,7 @@ export const copy = {
       emailUs: "Email us",
       goodFit: "Good fit if you need",
       fits: [
-        "AI strategy for your organization — where to start, what to build",
+        "AI strategy for your organization: where to start, what to build",
         "Agents, RAG, MCP, or copilots built and deployed to production",
         "An AI customer assistant for your store, restaurant, or cafe",
         "A technical advisor who has shipped real AI systems at enterprise scale",

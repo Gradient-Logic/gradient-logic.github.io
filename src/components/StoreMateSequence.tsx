@@ -7,11 +7,11 @@ import { ViewSlot } from "@/webgl/ViewSlot";
 const DEMO_URL = "https://cafe.example.com";
 
 const CHAT = [
-  { lang: "el", q: "Τι ώρα ανοίγετε σήμερα;", a: "Ανοίγουμε 09:00–22:00." },
+  { lang: "el", q: "Τι ώρα ανοίγετε σήμερα;", a: "Ανοίγουμε 09:00-22:00." },
   {
     lang: "en",
     q: "Do you have oat milk?",
-    a: "Yes — oat milk is available.",
+    a: "Yes, oat milk is available.",
   },
 ] as const;
 
@@ -58,7 +58,7 @@ export function StoreMateSequence({ title, steps }: StoreMateSequenceProps) {
     const applyOverlays = (p: number) => {
       const idx = Math.min(3, Math.floor(p * 4));
       if (activeRef.current && steps[idx]) {
-        activeRef.current.textContent = `0${idx + 1} — ${steps[idx].label}`;
+        activeRef.current.textContent = `0${idx + 1} · ${steps[idx].label}`;
       }
 
       if (urlRef.current) {
@@ -150,7 +150,7 @@ export function StoreMateSequence({ title, steps }: StoreMateSequenceProps) {
           <div className="sm-overlay" aria-hidden="true">
             <p className="sm-url mono" ref={urlRef} data-visible="0" />
             <p className="sm-active-step mono" ref={activeRef}>
-              01 — {steps[0]?.label}
+              01 · {steps[0]?.label}
             </p>
             <div className="sm-chat" ref={chatRef} data-visible="0">
               {CHAT.map((c, i) => (

@@ -127,7 +127,7 @@ export default function App() {
         >
           <div className="shell" data-reveal>
             <div className="section-head">
-              <p className="eyebrow">/00 — bring</p>
+              <p className="eyebrow">/00 · bring</p>
               <h2 id="bring-title">{t.bring.title}</h2>
             </div>
             <ul className="bring-list">
@@ -147,7 +147,7 @@ export default function App() {
         >
           <div className="shell">
             <div className="section-head" data-reveal>
-              <p className="eyebrow">/01 — services</p>
+              <p className="eyebrow">/01 · services</p>
               <h2 id="services-title">{t.services.title}</h2>
               <p>{t.services.sub}</p>
             </div>
@@ -237,7 +237,7 @@ export default function App() {
           aria-labelledby="storemate-title"
         >
           <div className="shell storemate-intro" data-reveal>
-            <p className="eyebrow">/02 — product · {t.storemate.badge}</p>
+            <p className="eyebrow">/02 · product · {t.storemate.badge}</p>
             <h2
               id="storemate-title"
               className="display"
@@ -290,7 +290,7 @@ export default function App() {
         <section id="about" className="section" aria-labelledby="about-title">
           <div className="shell about-grid">
             <div data-reveal>
-              <p className="eyebrow">/04 — about</p>
+              <p className="eyebrow">/04 · about</p>
               <h2
                 id="about-title"
                 className="display"
@@ -333,7 +333,7 @@ export default function App() {
           </div>
           <div className="shell contact-shell">
             <div className="section-head" data-reveal>
-              <p className="eyebrow">/05 — contact</p>
+              <p className="eyebrow">/05 · contact</p>
               <h2 id="contact-title">{t.contact.title}</h2>
               <p>{t.contact.sub}</p>
             </div>

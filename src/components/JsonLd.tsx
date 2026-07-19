@@ -28,7 +28,7 @@ export function JsonLd() {
       applicationCategory: "BusinessApplication",
       operatingSystem: "Web",
       description:
-        "Turnkey AI customer assistant for restaurants, cafes, and retail. Crawl a store website, build a knowledge base, deploy multilingual chat.",
+        "Turnkey AI customer assistant for restaurants, cafes and retail. Crawl a store website, build a knowledge base, deploy multilingual chat.",
       url: "https://gradient-logic.com/#storemate",
       offers: {
         "@type": "Offer",

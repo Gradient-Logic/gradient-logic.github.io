@@ -6,7 +6,7 @@ type ViewSlotProps = {
   className?: string;
 };
 
-/** Tracking div for a drei View — no Three dependency. */
+/** Tracking div for a drei View. No Three dependency. */
 export function ViewSlot({ id, className }: ViewSlotProps) {
   const ctx = useWebGLOptional();
   const ref = useRef<HTMLDivElement>(null);

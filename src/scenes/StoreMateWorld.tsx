@@ -10,8 +10,8 @@ type Frag = {
 };
 
 /**
- * StoreMate storefront card — progress-driven beats:
- * 0–0.25 idle/url, 0.25–0.5 scan+scatter, 0.5–0.75 KB grid, 0.75–1 chat pose.
+ * StoreMate storefront card. Progress-driven beats:
+ * 0-0.25 idle/url, 0.25-0.5 scan+scatter, 0.5-0.75 KB grid, 0.75-1 chat pose.
  */
 export function StoreMateWorld() {
   const { storemateProgress } = useWebGL();

@@ -1,5 +1,5 @@
 /**
- * Shared analytic loss surface — must stay in sync with the GLSL displacement.
+ * Shared analytic loss surface. Must stay in sync with the GLSL displacement.
  * Bowl + ripples so a visible minimum exists for gradient descent.
  */
 export function lossHeight(x: number, z: number, time = 0): number {

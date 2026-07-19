@@ -1,6 +1,6 @@
 # Gradient Logic
 
-Boutique AI consultancy site — [gradient-logic.com](https://gradient-logic.com).
+Boutique AI consultancy site for [gradient-logic.com](https://gradient-logic.com).
 
 ## Stack
 

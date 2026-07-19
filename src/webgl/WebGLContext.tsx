@@ -29,7 +29,7 @@ type WebGLContextValue = {
   hoveredGlyph: number | null;
   setHoveredGlyph: (i: number | null) => void;
   eventSource: RefObject<HTMLElement | null>;
-  /** Shared 0–1 StoreMate sequence progress (mutated, no React state). */
+  /** Shared 0-1 StoreMate sequence progress (mutated, no React state). */
   storemateProgress: RefObject<number>;
 };
 
@@ -50,7 +50,7 @@ type ProviderProps = {
   children: ReactNode;
 };
 
-/** DOM-only provider — no Three imports. Track refs feed the lazy SharedCanvas. */
+/** DOM-only provider with no Three imports. Track refs feed the lazy SharedCanvas. */
 export function WebGLProvider({ enabled, children }: ProviderProps) {
   const eventSource = useRef<HTMLElement | null>(null);
   const tracksRef = useRef<TrackMap>({});
