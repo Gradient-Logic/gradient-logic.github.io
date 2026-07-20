@@ -1,8 +1,9 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { lossGradient, lossHeight } from "@/webgl/lossField";
 import { isMobileViewport } from "@/webgl/detectWebGL";
+import { WEBMCP_DESCEND_EVENT } from "@/webmcp/registerTools";
 
 const SEGMENTS_DESKTOP = 96;
 const SEGMENTS_MOBILE = 48;
@@ -178,9 +179,11 @@ function DescentParticle({ resolveRef }: { resolveRef: ResolveRef }) {
 function SceneRig({
   resolveRef,
   animate,
+  descentKey,
 }: {
   resolveRef: ResolveRef;
   animate: boolean;
+  descentKey: number;
 }) {
   const group = useRef<THREE.Group>(null);
   const { pointer, size } = useThree();
@@ -210,7 +213,7 @@ function SceneRig({
   return (
     <group ref={group} position={[0.35, -0.35, 0]}>
       <LossSurface resolveRef={resolveRef} />
-      <DescentParticle resolveRef={resolveRef} />
+      <DescentParticle key={descentKey} resolveRef={resolveRef} />
     </group>
   );
 }
@@ -225,6 +228,7 @@ export function HeroWorld({
 }) {
   const resolveRef = useRef(animate ? 0 : 1);
   const readySent = useRef(false);
+  const [descentKey, setDescentKey] = useState(0);
 
   useEffect(() => {
     if (!readySent.current) {
@@ -232,6 +236,15 @@ export function HeroWorld({
       requestAnimationFrame(() => onReady?.());
     }
   }, [onReady]);
+
+  useEffect(() => {
+    const onDescend = () => {
+      resolveRef.current = 0.2;
+      setDescentKey((k) => k + 1);
+    };
+    window.addEventListener(WEBMCP_DESCEND_EVENT, onDescend);
+    return () => window.removeEventListener(WEBMCP_DESCEND_EVENT, onDescend);
+  }, []);
 
   useFrame((_, delta) => {
     if (!animate) {
@@ -243,5 +256,11 @@ export function HeroWorld({
     }
   });
 
-  return <SceneRig resolveRef={resolveRef} animate={animate} />;
+  return (
+    <SceneRig
+      resolveRef={resolveRef}
+      animate={animate}
+      descentKey={descentKey}
+    />
+  );
 }

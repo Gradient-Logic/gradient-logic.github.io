@@ -107,6 +107,11 @@ export function buildStaticShell(): string {
       <p>${esc(t.work.enterpriseDesc)}</p>
     </article>
     <article>
+      <p>${esc(t.work.infraTag)}</p>
+      <h3>${esc(t.work.infraTitle)}</h3>
+      <p>${esc(t.work.infraDesc)}</p>
+    </article>
+    <article>
       <h3>${esc(t.work.storemateTitle)}</h3>
       <p>${esc(t.work.storemateDesc)}</p>
       <p><a href="#storemate">${esc(t.work.details)}</a></p>

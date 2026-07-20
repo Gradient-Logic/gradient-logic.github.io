@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { ApproachPath } from "@/components/ApproachPath";
 import { Analytics } from "@/components/Analytics";
 import { HeroBackground } from "@/components/HeroBackground";
@@ -7,12 +7,18 @@ import { MotionRoot } from "@/components/MotionRoot";
 import { StoreMateSequence } from "@/components/StoreMateSequence";
 import { SITE, type Locale } from "@/content";
 import { useLocale } from "@/hooks/useLocale";
+import { useWebMCP } from "@/hooks/useWebMCP";
 import { useWebGLOptional, type ViewId } from "@/webgl/WebGLContext";
 import { ViewSlot } from "@/webgl/ViewSlot";
 
 export default function App() {
   const { locale, setLocale, t } = useLocale();
   const [menuOpen, setMenuOpen] = useState(false);
+  const getLocale = useCallback(() => locale, [locale]);
+  const { channelReady, eggOpen, dismissEgg } = useWebMCP({
+    getLocale,
+    setLocale,
+  });
 
   const nav = [
     { href: "#services", label: t.nav.services },
@@ -187,6 +193,16 @@ export default function App() {
               </article>
 
               <div className="work-side">
+                <article
+                  className="panel"
+                  data-reveal
+                  data-reveal-delay="0.04"
+                >
+                  <p className="panel__tag">{t.work.infraTag}</p>
+                  <h3>{t.work.infraTitle}</h3>
+                  <p>{t.work.infraDesc}</p>
+                </article>
+
                 <article
                   className="panel"
                   data-reveal
@@ -436,9 +452,26 @@ export default function App() {
           <p>
             © {new Date().getFullYear()} Gradient Logic. {t.footer.rights}
           </p>
-          <p>{t.footer.serving}</p>
+          <div className="site-footer__meta">
+            <p>{t.footer.serving}</p>
+            {channelReady ? (
+              <p className="agent-channel" title="WebMCP tools available">
+                <span className="agent-channel__dot" aria-hidden="true" />
+                {t.footer.agentChannel}
+              </p>
+            ) : null}
+          </div>
         </div>
       </footer>
+
+      {eggOpen ? (
+        <div className="egg-toast" role="status">
+          <p>{t.footer.eggToast}</p>
+          <button type="button" className="btn btn--ghost" onClick={dismissEgg}>
+            {t.footer.eggDismiss}
+          </button>
+        </div>
+      ) : null}
     </MotionRoot>
   );
 }

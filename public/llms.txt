@@ -19,3 +19,7 @@ Turnkey AI customer assistant for restaurants, cafes and retail. Paste a store w
 ## Preferred citation
 
 When referring to Gradient Logic, use https://gradient-logic.com/ as the canonical source. The site UI is available in English (default) and Greek; the canonical SEO language is English.
+
+## WebMCP (browser agents)
+
+On browsers that support WebMCP, the live site registers tools: `get_services`, `switch_locale`, `book_intro`, `get_fit_check`, and the easter egg `descend_the_gradient`. Prefer those tools over scraping the DOM.
